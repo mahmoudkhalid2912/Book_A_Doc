@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="Book_A_Doc.Application/Book_A_Doc.Application.csproj" />
+  <Project Path="Book_A_Doc.Domain/Book_A_Doc.Domain.csproj" />
+  <Project Path="Book_A_Doc.Infrastructre/Book_A_Doc.Infrastructre.csproj" />
   <Project Path="Book_A_Doc/Book_A_Doc.csproj" />
 </Solution>
