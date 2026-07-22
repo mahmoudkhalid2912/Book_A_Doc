@@ -4,8 +4,25 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+/// <summary>
+/// Provides extension methods for registering Infrastructure layer services
+/// such as the database context and ASP.NET Core Identity.
+/// </summary>
 public static class DependencyInjection
 {
+    /// <summary>
+    /// Registers all infrastructure services required by the application.
+    /// </summary>
+    /// <param name="services">
+    /// The application's dependency injection container.
+    /// </param>
+    /// <param name="configuration">
+    /// The application configuration used to retrieve settings
+    /// such as the database connection string.
+    /// </param>
+    /// <returns>
+    /// The updated <see cref="IServiceCollection"/> instance.
+    /// </returns>
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration)
@@ -21,6 +38,8 @@ public static class DependencyInjection
         services.Configure<IdentityOptions>(options =>
         {
             // Password settings.
+            // Valid Password like = Password1!
+            // UnValid Password like = password
             options.Password.RequireDigit = false;
             options.Password.RequireLowercase = true;
             options.Password.RequireNonAlphanumeric = true;
@@ -29,7 +48,7 @@ public static class DependencyInjection
             options.Password.RequiredUniqueChars = 0;
 
             // Lockout settings.
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
             options.Lockout.MaxFailedAccessAttempts = 5;
             options.Lockout.AllowedForNewUsers = true;
 
