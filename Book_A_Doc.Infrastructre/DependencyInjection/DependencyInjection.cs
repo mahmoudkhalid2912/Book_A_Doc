@@ -1,5 +1,12 @@
-﻿using Book_A_Doc.Infrastructre.Persistence;
+﻿using Book_A_Doc.Application.Services.Jwt_Service;
+using Book_A_Doc.Domain.Models.Identity;
+using Book_A_Doc.Infrastructre.JwtServices;
+using Book_A_Doc.Infrastructre.JwtServices.OptionsClass;
+using Book_A_Doc.Infrastructre.Persistence;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,7 +62,47 @@ public static class DependencyInjection
             // User settings.
             options.User.AllowedUserNameCharacters =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-            options.User.RequireUniqueEmail = false;
+            options.User.RequireUniqueEmail = true;
+
+            // SignIn settings.
+            options.SignIn.RequireConfirmedEmail = true;
+
+        });
+
+        return services;
+    }
+
+
+    private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
+    {
+        var jwtSetting = configuration
+            .GetSection(JwtOptions.SectionName)
+            .Get<JwtOptions>();
+
+        services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<Book_A_Doc_Context>();
+
+        services.AddSingleton<IJwtProvider, JwtProvider>();
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(o =>
+        {
+            o.SaveToken = true;
+            o.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSetting?.Issuer,
+                ValidAudience = jwtSetting?.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwtSetting?.Key ?? string.Empty))
+            };
         });
 
         return services;
