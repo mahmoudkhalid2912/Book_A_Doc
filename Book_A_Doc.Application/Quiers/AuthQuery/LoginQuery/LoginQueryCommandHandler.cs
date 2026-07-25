@@ -2,6 +2,7 @@
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
+using Book_A_Doc.Domain.ResultPattern.SuccesMessage;
 using Book_A_Doc.Infrastructre.JwtServices;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -37,7 +38,7 @@ public class LoginQueryCommandHandler(UserManager<ApplicationUser> userManager,I
             Token = token,
             TokenExpireIn = expiresIn
         };
-        return Result.Success(LoginResponse);
+        return Result.Success(LoginResponse,AuthMessages.LoginSuccess);
     }
 }
 
