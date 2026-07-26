@@ -1,0 +1,16 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Book_A_Doc.DependencyInjection;
+
+public static class DependencyInjection
+{
+    public static IServiceCollection AddPresentation(this IServiceCollection services)
+    {
+        services.AddControllers();
+
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+
+        return services;
+    }
+}
