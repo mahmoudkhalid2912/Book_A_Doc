@@ -2,7 +2,10 @@
 
 public class Result
 {
-    protected Result(bool isSuccess, Error error, string? message = null)
+    protected Result(
+        bool isSuccess,
+        Error error,
+        string? message = null)
     {
         if ((isSuccess && error != Error.None) ||
             (!isSuccess && error == Error.None))
@@ -29,32 +32,11 @@ public class Result
     public static Result Failure(Error error)
         => new(false, error);
 
-    public static Result<TValue> Success<TValue>(
-        TValue value,
+    public static Result<T> Success<T>(
+        T value,
         string? message = null)
         => new(value, true, Error.None, message);
 
-    public static Result<TValue> Failure<TValue>(Error error)
+    public static Result<T> Failure<T>(Error error)
         => new(default!, false, error);
-}
-
-public class Result<TValue> : Result
-{
-    private readonly TValue _value;
-
-    public Result(
-        TValue value,
-        bool isSuccess,
-        Error error,
-        string? message = null)
-        : base(isSuccess, error, message)
-    {
-        _value = value;
-    }
-
-    public TValue Value =>
-        IsSuccess
-            ? _value
-            : throw new InvalidOperationException(
-                "The value of a failure result cannot be accessed.");
 }
