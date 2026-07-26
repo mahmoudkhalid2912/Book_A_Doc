@@ -13,4 +13,6 @@ public class ApplicationUser : IdentityUser<Guid>
     public Doctor? Doctor { get; set; }
 
     public Patient? Patient { get; set; }
+
+    public IList<RefreshToken> RefreshTokens { get; set; } = [];
 }

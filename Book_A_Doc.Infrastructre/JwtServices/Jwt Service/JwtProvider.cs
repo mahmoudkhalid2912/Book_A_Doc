@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Book_A_Doc.Application.Services.Jwt_Service;
@@ -38,5 +39,42 @@ public class JwtProvider(IOptions<JwtOptions> jwtoptions) : IJwtProvider
             );
 
         return (Token: new JwtSecurityTokenHandler().WriteToken(Token), ExpiresIn: 30);
+    }
+
+    public string GenerateRefreshToken()
+    {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+    }
+
+    public Guid? ValidateToken(string token)
+    {
+        JwtSecurityTokenHandler tokenHandler = new();
+        var symmetricSecurityKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtoptions.Value.Key));
+
+        try
+        {
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                IssuerSigningKey = symmetricSecurityKey,
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            }, out SecurityToken validatedToken);
+
+            var jwtToken = (JwtSecurityToken)validatedToken;
+
+            var userIdClaim = jwtToken.Claims
+                .FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)?.Value;
+
+            return Guid.TryParse(userIdClaim, out var userId)
+                ? userId
+                : null;
+        }
+        catch
+        {
+            return null;
+        }
     }
 }
