@@ -25,5 +25,10 @@ public static class LoginErrors
         401
     );
 
-    public static Error InvalidRefreshToken { get; set; }
+    public static readonly Error InvalidRefreshToken = new
+        (
+         "Login.InvalidRefreshToken",
+            "Invalid refresh token.",
+            401
+        );
 }
