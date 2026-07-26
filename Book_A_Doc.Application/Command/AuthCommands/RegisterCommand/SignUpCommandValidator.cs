@@ -3,40 +3,7 @@
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using FluentValidation;
 
-/// <summary>
-/// Validates the <see cref="SignUpCommand"/> request.
-///
-/// Validation Rules:
-/// <list type="bullet">
-/// <item>
-/// <description>
-/// <b>Full Name:</b> Required and must not exceed 100 characters.
-/// </description>
-/// </item>
-/// <item>
-/// <description>
-/// <b>Email:</b> Required, must be in a valid email format, and only Gmail addresses are allowed.
-/// </description>
-/// </item>
-/// <item>
-/// <description>
-/// <b>Password:</b> Required, at least 6 characters long, must contain at least one uppercase letter,
-/// one lowercase letter, and one special character.
-/// </description>
-/// </item>
-/// <item>
-/// <description>
-/// <b>Phone Number:</b> Required and must be a valid Egyptian mobile phone number
-/// (e.g. 01093308387 or +201093308387).
-/// </description>
-/// </item>
-/// <item>
-/// <description>
-/// <b>Birth Date:</b> Required and the user must be at least 15 years old.
-/// </description>
-/// </item>
-/// </list>
-/// </summary>
+
 public class SignUpCommandValidator : AbstractValidator<SignUpCommand>
 {
     public SignUpCommandValidator()
