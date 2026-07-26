@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
 
-public class LoginQueryCommand:IRequest<Result<LoginDtoResponse>>
+public class LoginQueryCommand : IRequest<Result<LoginDtoResponse>>
 {
     public string Email { get; set; } = string.Empty;
 

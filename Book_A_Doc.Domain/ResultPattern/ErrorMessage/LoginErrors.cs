@@ -25,5 +25,5 @@ public static class LoginErrors
         401
     );
 
-
+    public static Error InvalidRefreshToken { get; set; }
 }
