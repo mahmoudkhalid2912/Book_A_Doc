@@ -4,7 +4,7 @@ using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using FluentValidation;
 
 /// <summary>
-/// Validates the <see cref="SignInCommand"/> request.
+/// Validates the <see cref="SignUpCommand"/> request.
 ///
 /// Validation Rules:
 /// <list type="bullet">
@@ -37,9 +37,9 @@ using FluentValidation;
 /// </item>
 /// </list>
 /// </summary>
-public class SignInCommandValidator : AbstractValidator<SignInCommand>
+public class SignUpCommandValidator : AbstractValidator<SignUpCommand>
 {
-    public SignInCommandValidator()
+    public SignUpCommandValidator()
     {
 
         

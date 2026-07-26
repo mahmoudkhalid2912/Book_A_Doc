@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
 
-public class SignInCommandHandler(UserManager<ApplicationUser> _userManager) : IRequestHandler<SignInCommand, Result>
+public class SignUpCommandHandler(UserManager<ApplicationUser> _userManager) : IRequestHandler<SignUpCommand, Result>
 {
-    public async Task<Result> Handle(SignInCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SignUpCommand request, CancellationToken cancellationToken)
     {
      
         var emailExists = await _userManager.Users
