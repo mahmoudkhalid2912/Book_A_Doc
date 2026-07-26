@@ -50,13 +50,16 @@ public class SignUpCommandValidator : AbstractValidator<SignUpCommand>
             .WithMessage(RegisterErrors.UserMustBeAtLeast15YearsOld.Description);
     }
 
-    private static bool BeAtLeast15YearsOld(DateOnly birthDate)
+    private static bool BeAtLeast15YearsOld(DateOnly? birthDate)
     {
+        if (birthDate is null)
+            return false;
+
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var age = today.Year - birthDate.Year;
+        var age = today.Year - birthDate.Value.Year;
 
-        if (birthDate > today.AddYears(-age))
+        if (birthDate.Value > today.AddYears(-age))
             age--;
 
         return age >= 15;

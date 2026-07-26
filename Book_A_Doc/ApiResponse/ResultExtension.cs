@@ -19,6 +19,22 @@ public static class ResultExtensions
             });
         }
 
+        if (result is IValidationResult validationResult)
+        {
+            return new ObjectResult(new ApiResponse<T>
+            {
+                Message = result.Error.Description,
+                Errors = validationResult.Errors.Select(error => new ApiError
+                {
+                    Code = error.Code,
+                    Description = error.Description
+                })
+            })
+            {
+                StatusCode = result.Error.StatusCode
+            };
+        }
+
         return new ObjectResult(new ApiResponse<T>
         {
             Message = result.Error.Description,
@@ -46,6 +62,22 @@ public static class ResultExtensions
             {
                 Message = result.Message ?? "Success"
             });
+        }
+
+        if (result is IValidationResult validationResult)
+        {
+            return new ObjectResult(new ApiResponse<object>
+            {
+                Message = result.Error.Description,
+                Errors = validationResult.Errors.Select(error => new ApiError
+                {
+                    Code = error.Code,
+                    Description = error.Description
+                })
+            })
+            {
+                StatusCode = result.Error.StatusCode
+            };
         }
 
         return new ObjectResult(new ApiResponse<object>

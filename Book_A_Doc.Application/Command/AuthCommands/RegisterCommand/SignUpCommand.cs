@@ -9,7 +9,7 @@ public class SignUpCommand:IRequest<Result>
 
     public string Email { get; set; } = string.Empty;
 
-    public DateOnly BirthDay { get; set; } 
+    public DateOnly? BirthDay { get; set; } 
    
     public string Password { get; set; } = string.Empty;
 

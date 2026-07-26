@@ -62,16 +62,21 @@ public static class DependencyInjection
     }
 
     private static IServiceCollection AddAuthConfig(
-        this IServiceCollection services,
-        IConfiguration configuration)
+    this IServiceCollection services,
+    IConfiguration configuration)
     {
-        var jwtSetting = configuration
+        // Bind JwtOptions from configuration
+        services.Configure<JwtOptions>(
+            configuration.GetSection(JwtOptions.SectionName));
+
+        var jwtSettings = configuration
             .GetSection(JwtOptions.SectionName)
-            .Get<JwtOptions>();
+            .Get<JwtOptions>()
+            ?? throw new InvalidOperationException("JWT configuration is missing.");
 
         services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
-                .AddEntityFrameworkStores<Book_A_Doc_Context>()
-                .AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<Book_A_Doc_Context>()
+            .AddDefaultTokenProviders();
 
         services.AddSingleton<IJwtProvider, JwtProvider>();
 
@@ -80,22 +85,28 @@ public static class DependencyInjection
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddJwtBearer(o =>
+        .AddJwtBearer(options =>
         {
-            o.SaveToken = true;
-            o.TokenValidationParameters = new TokenValidationParameters
+            options.SaveToken = true;
+
+            options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtSetting?.Issuer,
-                ValidAudience = jwtSetting?.Audience,
+
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(jwtSetting?.Key ?? string.Empty))
+                    Encoding.UTF8.GetBytes(jwtSettings.Key)),
+
+                ClockSkew = TimeSpan.Zero
             };
         });
 
         return services;
     }
 }
+
