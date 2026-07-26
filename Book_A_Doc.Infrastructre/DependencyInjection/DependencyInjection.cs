@@ -3,13 +3,13 @@ using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Infrastructre.JwtServices;
 using Book_A_Doc.Infrastructre.JwtServices.OptionsClass;
 using Book_A_Doc.Infrastructre.Persistence;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 /// <summary>
 /// Provides extension methods for registering Infrastructure layer services
@@ -20,16 +20,6 @@ public static class DependencyInjection
     /// <summary>
     /// Registers all infrastructure services required by the application.
     /// </summary>
-    /// <param name="services">
-    /// The application's dependency injection container.
-    /// </param>
-    /// <param name="configuration">
-    /// The application configuration used to retrieve settings
-    /// such as the database connection string.
-    /// </param>
-    /// <returns>
-    /// The updated <see cref="IServiceCollection"/> instance.
-    /// </returns>
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration)
@@ -45,8 +35,6 @@ public static class DependencyInjection
         services.Configure<IdentityOptions>(options =>
         {
             // Password settings.
-            // Valid Password like = Password1!
-            // UnValid Password like = password
             options.Password.RequireDigit = false;
             options.Password.RequireLowercase = true;
             options.Password.RequireNonAlphanumeric = true;
@@ -61,26 +49,29 @@ public static class DependencyInjection
 
             // User settings.
             options.User.AllowedUserNameCharacters =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
             options.User.RequireUniqueEmail = true;
 
             // SignIn settings.
             options.SignIn.RequireConfirmedEmail = true;
-
         });
+
+        services.AddAuthConfig(configuration);
 
         return services;
     }
 
-
-    private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddAuthConfig(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         var jwtSetting = configuration
             .GetSection(JwtOptions.SectionName)
             .Get<JwtOptions>();
 
-        services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<Book_A_Doc_Context>();
+        services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
+                .AddEntityFrameworkStores<Book_A_Doc_Context>()
+                .AddDefaultTokenProviders();
 
         services.AddSingleton<IJwtProvider, JwtProvider>();
 
