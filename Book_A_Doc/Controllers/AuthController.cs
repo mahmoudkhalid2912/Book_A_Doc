@@ -1,4 +1,5 @@
 ﻿using Book_A_Doc.ApiResponse;
+using Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
 using Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
 using Book_A_Doc.Application.Quiers.AuthQuery.RefreshTokenQuery;
 using MediatR;
@@ -26,6 +27,13 @@ public class AuthController : ApiControllerBase
 
     [HttpPost("RevokeRefreshToken")]
     public async Task<IActionResult> RevokeRefreshToken([FromBody] RevokeRefreshTokenCommand command, [FromServices] IMediator mediator)
+    {
+        var result = await mediator.Send(command);
+        return ToResponse(result);
+    }
+
+    [HttpPost("SignUp")]
+    public async Task<IActionResult> SignUp([FromBody] SignUpCommand command, [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(command);
         return ToResponse(result);

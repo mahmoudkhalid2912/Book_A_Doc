@@ -1,14 +1,19 @@
 ﻿using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
+using Book_A_Doc.Domain.ResultPattern.SuccesMessage;
+using Book_A_Doc.Infrastructre.JwtServices;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Text;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
 
-public class SignUpCommandHandler(UserManager<ApplicationUser> _userManager) : IRequestHandler<SignUpCommand, Result>
+public class SignUpCommandHandler(UserManager<ApplicationUser> _userManager,IJwtProvider jwtProvider) : IRequestHandler<SignUpCommand, Result>
 {
     public async Task<Result> Handle(SignUpCommand request, CancellationToken cancellationToken)
     {
@@ -37,17 +42,18 @@ public class SignUpCommandHandler(UserManager<ApplicationUser> _userManager) : I
         // If creation fails, return the Identity errors.
         if (!createResult.Succeeded)
         {
-            return Result.Failure(RegisterErrors.UserCreationFailed);
+            var error = createResult.Errors.First();
+            return Result.Failure(new Error(error.Code,error.Description, StatusCodes.Status400BadRequest));
         }
 
-        // Generate an email confirmation token.(To Do)
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(ApplicationUser);
+        token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-        // Send the confirmation email containing the confirmation link.(To Do)
+        // Make Confirmation email latter
 
 
-        // Return a success response indicating that registration completed
-        // and the user must confirm their email before signing in
+        // assign user as a patien first
 
-        return Result.Success("Registration successful. Please check your email to confirm your account.");
+        return Result.Success(AuthMessages.RegisterSuccess);
     }
 }
