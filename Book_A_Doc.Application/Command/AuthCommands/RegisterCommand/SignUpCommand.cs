@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
 
-public class SignInCommand:IRequest<Result>
+public class SignUpCommand:IRequest<Result>
 {
     public string FullName { get; set; } = string.Empty;
 
