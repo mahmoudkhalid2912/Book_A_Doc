@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 
 namespace Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
 
-public class LoginQueryCommandHandler(UserManager<ApplicationUser> userManager,IJwtProvider jwtProvider) : IRequestHandler<LoginQueryCommand, Result<LoginDtoResponse>>
+public class LoginQueryCommandHandler(UserManager<ApplicationUser> userManager,IJwtProvider jwtProvider,SignInManager<ApplicationUser>signInManager) : IRequestHandler<LoginQueryCommand, Result<LoginDtoResponse>>
 {
     private readonly int RefreshTokenExpiryDays=30;
     public async Task<Result<LoginDtoResponse>> Handle(LoginQueryCommand request, CancellationToken cancellationToken)
@@ -24,43 +24,53 @@ public class LoginQueryCommandHandler(UserManager<ApplicationUser> userManager,I
         }
 
 
-        //Check if password is correct
-        bool isPasswordValid = await userManager.CheckPasswordAsync(User, request.Password);
+        // check password using SignInManager
+        var result = await signInManager.PasswordSignInAsync(User, request.Password, false,false);
 
-        if (!isPasswordValid) return Result.Failure<LoginDtoResponse>(LoginErrors.InvalidCredentials);
-
-
-
-        // Generate JWT Token
-        var (token,expiresIn) = jwtProvider.GenerateJwtToken(User);
-
-
-
-        // Generate Refresh Token
-        var refreshToken = jwtProvider.GenerateRefreshToken();
-        var refreshTokenExpiration = DateTime.UtcNow.AddDays(RefreshTokenExpiryDays);
-
-        // Save the refresh token and its expiration to the user entity
-        User.RefreshTokens.Add(new RefreshToken
+        if (result.Succeeded) 
         {
-            Token = refreshToken,
-             ExpiresOn= refreshTokenExpiration
-        });
-        await userManager.UpdateAsync(User);
+            // Generate JWT Token
+            var (token, expiresIn) = jwtProvider.GenerateJwtToken(User);
 
 
-        // Return the response
-        var LoginResponse = new LoginDtoResponse
-        {
-            UserId = User.Id,
-            FullName = User.FullName,
-            Email = User.Email!,
-            Token = token,
-            TokenExpireIn = expiresIn,
-            RefreshToken = refreshToken,
-            RefreshTokenExpiration = refreshTokenExpiration,
-        };
-        return Result.Success(LoginResponse,AuthMessages.LoginSuccess);
+
+            // Generate Refresh Token
+            var refreshToken = jwtProvider.GenerateRefreshToken();
+            var refreshTokenExpiration = DateTime.UtcNow.AddDays(RefreshTokenExpiryDays);
+
+            // Save the refresh token and its expiration to the user entity
+            User.RefreshTokens.Add(new RefreshToken
+            {
+                Token = refreshToken,
+                ExpiresOn = refreshTokenExpiration
+            });
+            await userManager.UpdateAsync(User);
+
+
+            // Return the response
+            var LoginResponse = new LoginDtoResponse
+            {
+                UserId = User.Id,
+                FullName = User.FullName,
+                Email = User.Email!,
+                Token = token,
+                TokenExpireIn = expiresIn,
+                RefreshToken = refreshToken,
+                RefreshTokenExpiration = refreshTokenExpiration,
+            };
+            return Result.Success(LoginResponse, AuthMessages.LoginSuccess);
+        }
+
+        // Password is incorrect or user doesn't confirm there email
+
+        return Result.Failure<LoginDtoResponse>
+            (result.IsNotAllowed?
+            LoginErrors.EmailNotConfirmed
+            :LoginErrors.InvalidCredentials);
+
+
+
+
     }
 
     
