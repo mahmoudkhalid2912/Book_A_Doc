@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
 
-public class SignUpCommandHandler(UserManager<ApplicationUser> _userManager,IJwtProvider jwtProvider) : IRequestHandler<SignUpCommand, Result>
+public class SignUpCommandHandler(UserManager<ApplicationUser> _userManager) : IRequestHandler<SignUpCommand, Result>
 {
     public async Task<Result> Handle(SignUpCommand request, CancellationToken cancellationToken)
     {
