@@ -31,4 +31,11 @@ public static class LoginErrors
             "Invalid refresh token.",
             401
         );
+
+    public static readonly Error EmailNotConfirmed = new
+        (
+         "Login.EmailNotConfirmed",
+            "Email is not confirmed.",
+            401
+        );
 }
