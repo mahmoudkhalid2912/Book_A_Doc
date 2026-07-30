@@ -2,8 +2,10 @@
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Infrastructre.JwtServices;
 using Book_A_Doc.Infrastructre.JwtServices.OptionsClass;
+using Book_A_Doc.Infrastructre.MailService;
 using Book_A_Doc.Infrastructre.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -59,6 +61,8 @@ public static class DependencyInjection
         services.AddAuthConfig(configuration);
 
         services.AddMailConfig(configuration);
+
+        services.AddScoped<IEmailSender, EmailSender>();
 
         return services;
     }
