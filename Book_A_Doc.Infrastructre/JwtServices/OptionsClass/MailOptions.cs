@@ -1,7 +1,11 @@
-﻿namespace Book_A_Doc.Infrastructre.JwtServices.OptionsClass;
+﻿using System.Reflection.Metadata;
+
+namespace Book_A_Doc.Infrastructre.JwtServices.OptionsClass;
 
 public class MailOptions
 {
+
+    public static string SectionName => "MailSettings";
     public string Mail { get; set; } = string.Empty;
 
     public string DisplayName { get; set; } = string.Empty;
