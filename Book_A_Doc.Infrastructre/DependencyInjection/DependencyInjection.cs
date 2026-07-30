@@ -58,6 +58,8 @@ public static class DependencyInjection
 
         services.AddAuthConfig(configuration);
 
+        services.AddMailConfig(configuration);
+
         return services;
     }
 
@@ -106,6 +108,12 @@ public static class DependencyInjection
             };
         });
 
+        return services;
+    }
+
+    private static IServiceCollection AddMailConfig(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<MailOptions>(configuration.GetSection(MailOptions.SectionName));
         return services;
     }
 }
