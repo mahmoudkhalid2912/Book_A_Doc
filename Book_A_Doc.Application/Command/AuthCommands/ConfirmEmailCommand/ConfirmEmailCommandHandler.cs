@@ -1,6 +1,7 @@
 ﻿using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
+using Book_A_Doc.Domain.ResultPattern.SuccesMessage;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -42,6 +43,6 @@ public class ConfirmEmailCommandHandler(UserManager<ApplicationUser> userManager
             return Result.Failure(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
         }
 
-        return Result.Success();
+        return Result.Success(AuthMessages.ConfirmationEmailSent);
     }
 }
