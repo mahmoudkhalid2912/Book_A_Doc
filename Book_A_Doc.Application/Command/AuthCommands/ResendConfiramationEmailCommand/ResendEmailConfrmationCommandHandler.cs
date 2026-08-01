@@ -2,14 +2,18 @@
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using Book_A_Doc.Domain.ResultPattern.SuccesMessage;
+using Book_A_Doc.Infrastructre.JwtServices.OptionsClass;
+using Book_A_Doc.Infrastructre.MailService;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 using System.Text;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.ResendConfiramationEmailCommand;
 
-public class ResendEmailConfrmationCommandHandler(UserManager<ApplicationUser>userManager) : IRequestHandler<ResendEmailConfiramtionCommand, Result>
+public class ResendEmailConfrmationCommandHandler(UserManager<ApplicationUser>userManager,IOptions<ApplicationSettings>appSettings,IEmailSender emailSender) : IRequestHandler<ResendEmailConfiramtionCommand, Result>
 {
     public async Task<Result> Handle(ResendEmailConfiramtionCommand request, CancellationToken cancellationToken)
     {
@@ -27,6 +31,18 @@ public class ResendEmailConfrmationCommandHandler(UserManager<ApplicationUser>us
         var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
         token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
+        var confirmationLink = $"{appSettings.Value.BaseUrl}/api/Auth/ConfirmEmail"
+            + $"?userId={user.Id}&token={token}";
+
+        var emailBody = EmailBodyBuilder.GenerateEmailBody(
+    "EmailConfirmation",
+    new Dictionary<string, string>
+         {
+                 { "UserName", user.FullName },
+                 { "ConfirmationLink", confirmationLink }
+        });
+
+        await emailSender.SendEmailAsync(user.Email!, AuthMessages.ConfirmationEmailSent, emailBody);
         return Result.Success(AuthMessages.ConfirmationEmailSent);
     }
 }
