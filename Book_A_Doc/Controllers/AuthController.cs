@@ -13,6 +13,14 @@ namespace Book_A_Doc.Controllers;
 [ApiController]
 public class AuthController : ApiControllerBase
 {
+
+    [HttpPost("SignUp")]
+    public async Task<IActionResult> SignUp([FromBody] SignUpCommand command, [FromServices] IMediator mediator)
+    {
+        var result = await mediator.Send(command);
+        return ToResponse(result);
+    }
+
     [HttpPost("SignIn")]
     public async Task<IActionResult> SignIn([FromBody] LoginQueryCommand command, [FromServices] IMediator mediator)
     {
@@ -32,14 +40,7 @@ public class AuthController : ApiControllerBase
     {
         var result = await mediator.Send(command);
         return ToResponse(result);
-    }
-
-    [HttpPost("SignUp")]
-    public async Task<IActionResult> SignUp([FromBody] SignUpCommand command, [FromServices] IMediator mediator)
-    {
-        var result = await mediator.Send(command);
-        return ToResponse(result);
-    }
+    }  
 
     [HttpPost("ConfirmEmail")]
     public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailCommand command, [FromServices] IMediator mediator)

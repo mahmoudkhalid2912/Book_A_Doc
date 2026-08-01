@@ -11,7 +11,7 @@ public class ApiResponse<T>
 
 public class ApiError
 {
-    public string Code { get; init; } = string.Empty;
+    public string Field { get; init; } = string.Empty;
 
-    public string Description { get; init; } = string.Empty;
+    public IEnumerable<string> Descriptions { get; init; } = [];
 }
