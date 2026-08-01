@@ -62,6 +62,8 @@ public static class DependencyInjection
 
         services.AddMailConfig(configuration);
 
+        services.AddApplicationSettings(configuration);
+
         services.AddScoped<IEmailSender, EmailSender>();
 
         return services;
@@ -118,6 +120,13 @@ public static class DependencyInjection
     private static IServiceCollection AddMailConfig(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<MailOptions>(configuration.GetSection(MailOptions.SectionName));
+        return services;
+    }
+
+    private static IServiceCollection AddApplicationSettings(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<ApplicationSettings>(
+    configuration.GetSection(ApplicationSettings.SectionName));
         return services;
     }
 }
