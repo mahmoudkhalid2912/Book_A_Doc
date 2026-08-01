@@ -14,7 +14,7 @@ public class ConfirmEmailCommandHandler(UserManager<ApplicationUser> userManager
 {
     public async Task<Result> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
-        var user = await userManager.FindByEmailAsync(request.UserId.ToString());
+        var user = await userManager.FindByIdAsync(request.UserId.ToString());
         if(user is null)
         {
             return Result.Failure(EmailConfirmationError.InvalidToken);
