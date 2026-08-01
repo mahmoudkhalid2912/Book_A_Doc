@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.ConfirmEmailCommand;
@@ -34,7 +35,6 @@ public class ConfirmEmailCommandHandler(UserManager<ApplicationUser> userManager
         {
             return Result.Failure(EmailConfirmationError.InvalidToken);
         }
-
         var result = await userManager.ConfirmEmailAsync(user, token);
 
         if (!result.Succeeded)
@@ -43,6 +43,6 @@ public class ConfirmEmailCommandHandler(UserManager<ApplicationUser> userManager
             return Result.Failure(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
         }
 
-        return Result.Success(AuthMessages.ConfirmationEmailSent);
+        return Result.Success(AuthMessages.EmailConfirmed);
     }
 }

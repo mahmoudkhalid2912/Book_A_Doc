@@ -10,12 +10,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
 
-public class SignUpCommandHandler(UserManager<ApplicationUser> _userManager, IOptions<ApplicationSettings> appSettings,IEmailSender emailSender) : IRequestHandler<SignUpCommand, Result>
+public class SignUpCommandHandler(UserManager<ApplicationUser> _userManager
+    , IOptions<ApplicationSettings> appSettings
+    ,IEmailSender emailSender) : IRequestHandler<SignUpCommand, Result>
 {
     public async Task<Result> Handle(SignUpCommand request, CancellationToken cancellationToken)
     {
@@ -50,6 +53,9 @@ public class SignUpCommandHandler(UserManager<ApplicationUser> _userManager, IOp
 
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(ApplicationUser);
         token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+        
+
 
         var confirmationLink =$"{appSettings.Value.BaseUrl}/api/Auth/ConfirmEmail" 
             +$"?userId={ApplicationUser.Id}&token={token}";
