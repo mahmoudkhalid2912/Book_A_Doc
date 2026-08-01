@@ -24,11 +24,15 @@ public static class ResultExtensions
             return new ObjectResult(new ApiResponse<T>
             {
                 Message = result.Error.Description,
-                Errors = validationResult.Errors.Select(error => new ApiError
-                {
-                    Code = error.Code,
-                    Description = error.Description
-                })
+                Errors = validationResult.Errors
+                    .GroupBy(error => error.Code)
+                    .Select(group => new ApiError
+                    {
+                        Field = group.Key,
+                        Descriptions = group
+                            .Select(x => x.Description)
+                            .ToList()
+                    })
             })
             {
                 StatusCode = result.Error.StatusCode
@@ -42,8 +46,11 @@ public static class ResultExtensions
             [
                 new ApiError
                 {
-                    Code = result.Error.Code,
-                    Description = result.Error.Description
+                    Field = result.Error.Code,
+                    Descriptions =
+                    [
+                        result.Error.Description
+                    ]
                 }
             ]
         })
@@ -69,11 +76,15 @@ public static class ResultExtensions
             return new ObjectResult(new ApiResponse<object>
             {
                 Message = result.Error.Description,
-                Errors = validationResult.Errors.Select(error => new ApiError
-                {
-                    Code = error.Code,
-                    Description = error.Description
-                })
+                Errors = validationResult.Errors
+                    .GroupBy(error => error.Code)
+                    .Select(group => new ApiError
+                    {
+                        Field = group.Key,
+                        Descriptions = group
+                            .Select(x => x.Description)
+                            .ToList()
+                    })
             })
             {
                 StatusCode = result.Error.StatusCode
@@ -87,8 +98,11 @@ public static class ResultExtensions
             [
                 new ApiError
                 {
-                    Code = result.Error.Code,
-                    Description = result.Error.Description
+                    Field = result.Error.Code,
+                    Descriptions =
+                    [
+                        result.Error.Description
+                    ]
                 }
             ]
         })
