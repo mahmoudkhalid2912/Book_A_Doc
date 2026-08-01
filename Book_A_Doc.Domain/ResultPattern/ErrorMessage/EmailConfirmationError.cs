@@ -20,4 +20,14 @@ public static class EmailConfirmationError
         "ConfirmEmail.DuplicatedConfirmation"
         , "Email is already confirmed."
         , 400);
+
+    public static readonly Error EmailIsRequired = new(
+        "ConfirmEmail.EmailIsRequired"
+        , "Email is required."
+        , 400);
+
+    public static readonly Error InvalidEmail = new(
+        "ConfirmEmail.InvalidEmail"
+        , "Invalid email format."
+        , 400); 
 }
