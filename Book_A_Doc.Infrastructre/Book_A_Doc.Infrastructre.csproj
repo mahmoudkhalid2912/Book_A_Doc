@@ -29,8 +29,4 @@
     <ProjectReference Include="..\Book_A_Doc.Domain\Book_A_Doc.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MailService\" />
-  </ItemGroup>
-
 </Project>
