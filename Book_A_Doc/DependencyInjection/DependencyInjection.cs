@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Book_A_Doc.DependencyInjection;
+﻿namespace Book_A_Doc.DependencyInjection;
 
 public static class DependencyInjection
 {
