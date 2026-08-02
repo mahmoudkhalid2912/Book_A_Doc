@@ -1,4 +1,4 @@
-﻿using Book_A_Doc.Application.Services.Jwt_Service;
+﻿using Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
@@ -6,21 +6,20 @@ using Book_A_Doc.Domain.ResultPattern.SuccesMessage;
 using Book_A_Doc.Infrastructre.JwtServices;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Cryptography;
 
-namespace Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
+namespace Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
 
-public class LoginQueryCommandHandler(UserManager<ApplicationUser> userManager,IJwtProvider jwtProvider,SignInManager<ApplicationUser>signInManager) : IRequestHandler<LoginQueryCommand, Result<LoginDtoResponse>>
+public class LoginCommandHandler(UserManager<ApplicationUser> userManager,IJwtProvider jwtProvider,SignInManager<ApplicationUser>signInManager) : IRequestHandler<LoginCommand, Result<LoginResponse>>
 {
     private readonly int RefreshTokenExpiryDays=30;
-    public async Task<Result<LoginDtoResponse>> Handle(LoginQueryCommand request, CancellationToken cancellationToken)
+    public async Task<Result<LoginResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         //Check if user exists
         var User = await userManager.FindByEmailAsync(request.Email);
 
         if (User == null) 
         { 
-            return Result.Failure<LoginDtoResponse>(LoginErrors.InvalidCredentials);
+            return Result.Failure<LoginResponse>(LoginErrors.InvalidCredentials);
         }
 
 
@@ -48,7 +47,7 @@ public class LoginQueryCommandHandler(UserManager<ApplicationUser> userManager,I
 
 
             // Return the response
-            var LoginResponse = new LoginDtoResponse
+            var LoginResponse = new LoginResponse
             {
                 UserId = User.Id,
                 FullName = User.FullName,
@@ -63,7 +62,7 @@ public class LoginQueryCommandHandler(UserManager<ApplicationUser> userManager,I
 
         // Password is incorrect or user doesn't confirm there email
 
-        return Result.Failure<LoginDtoResponse>
+        return Result.Failure<LoginResponse>
             (result.IsNotAllowed?
             LoginErrors.EmailNotConfirmed
             :LoginErrors.InvalidCredentials);

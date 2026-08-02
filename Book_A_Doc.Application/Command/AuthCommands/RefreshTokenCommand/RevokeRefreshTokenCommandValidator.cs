@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Book_A_Doc.Application.Quiers.AuthQuery.RefreshTokenQuery;
+namespace Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 
 public class RevokeRefreshTokenCommandValidator:AbstractValidator<RevokeRefreshTokenCommand>
 {

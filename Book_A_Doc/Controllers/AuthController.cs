@@ -1,9 +1,9 @@
 ﻿using Book_A_Doc.ApiResponse;
 using Book_A_Doc.Application.Command.AuthCommands.ConfirmEmailCommand;
+using Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
+using Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 using Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
 using Book_A_Doc.Application.Command.AuthCommands.ResendConfiramationEmailCommand;
-using Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
-using Book_A_Doc.Application.Quiers.AuthQuery.RefreshTokenQuery;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +22,7 @@ public class AuthController : ApiControllerBase
     }
 
     [HttpPost("SignIn")]
-    public async Task<IActionResult> SignIn([FromBody] LoginQueryCommand command, [FromServices] IMediator mediator)
+    public async Task<IActionResult> SignIn([FromBody] LoginCommand command, [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(command);
         return ToResponse(result);

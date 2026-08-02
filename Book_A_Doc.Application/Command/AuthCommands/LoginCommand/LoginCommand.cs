@@ -1,9 +1,9 @@
 ﻿using Book_A_Doc.Domain.ResultPattern;
 using MediatR;
 
-namespace Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
+namespace Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
 
-public class LoginQueryCommand : IRequest<Result<LoginDtoResponse>>
+public class LoginCommand : IRequest<Result<LoginResponse>>
 {
     public string Email { get; set; } = string.Empty;
 

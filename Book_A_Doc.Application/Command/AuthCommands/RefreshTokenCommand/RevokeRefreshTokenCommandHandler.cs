@@ -1,5 +1,4 @@
-﻿using Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
-using Book_A_Doc.Domain.Models.Identity;
+﻿using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using Book_A_Doc.Infrastructre.JwtServices;
@@ -7,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Book_A_Doc.Application.Quiers.AuthQuery.RefreshTokenQuery;
+namespace Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 
 public class RevokeRefreshTokenCommandHandler(UserManager<ApplicationUser> userManager, IJwtProvider jwtProvider) : IRequestHandler<RevokeRefreshTokenCommand, Result<bool>>
 {

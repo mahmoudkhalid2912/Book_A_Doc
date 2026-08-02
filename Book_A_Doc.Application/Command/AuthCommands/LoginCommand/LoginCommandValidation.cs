@@ -1,10 +1,10 @@
-﻿namespace Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
+﻿namespace Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
 
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using FluentValidation;
-public class LoginQueryCommandValidation:AbstractValidator<LoginQueryCommand>
+public class LoginCommandValidation:AbstractValidator<LoginCommand>
 {
-    public LoginQueryCommandValidation()
+    public LoginCommandValidation()
     {
         RuleFor(x => x.Email).NotEmpty().WithMessage(LoginErrors.EmailIsRequried.Description)
             .EmailAddress().WithMessage(LoginErrors.InvalidEmailFormat.Description);
