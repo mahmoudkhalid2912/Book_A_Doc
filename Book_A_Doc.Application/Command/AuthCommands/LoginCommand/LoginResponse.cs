@@ -1,6 +1,6 @@
-﻿namespace Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
+﻿namespace Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
 
-public class LoginDtoResponse
+public class LoginResponse
 {
     public Guid UserId { get; set; }
 

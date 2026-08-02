@@ -1,4 +1,4 @@
-﻿using Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
+﻿using Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
@@ -8,19 +8,19 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Book_A_Doc.Application.Quiers.AuthQuery.RefreshTokenQuery;
+namespace Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 
-public class RefreshTokenCommandHandler(UserManager<ApplicationUser> userManager,IJwtProvider jwtProvider) : IRequestHandler<RefreshTokenCommand, Result<LoginDtoResponse>>
+public class RefreshTokenCommandHandler(UserManager<ApplicationUser> userManager,IJwtProvider jwtProvider) : IRequestHandler<RefreshTokenCommand, Result<LoginResponse>>
 {
     public readonly int RefreshTokenExpiryDays = 30;
-    public async Task<Result<LoginDtoResponse>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
+    public async Task<Result<LoginResponse>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
         // Validate the JWT token and get the user ID
         var UserId = jwtProvider.ValidateToken(request.Token);
 
         if(UserId is null)
         {
-            return Result.Failure<LoginDtoResponse>(LoginErrors.InvalidCredentials);
+            return Result.Failure<LoginResponse>(LoginErrors.InvalidCredentials);
         }
 
         // Get the user from the database along with their refresh tokens
@@ -30,7 +30,7 @@ public class RefreshTokenCommandHandler(UserManager<ApplicationUser> userManager
 
         if (user == null)
         {
-            return Result.Failure<LoginDtoResponse>(LoginErrors.InvalidCredentials);
+            return Result.Failure<LoginResponse>(LoginErrors.InvalidCredentials);
         }
 
         // Find the refresh token in the user's refresh tokens
@@ -39,7 +39,7 @@ public class RefreshTokenCommandHandler(UserManager<ApplicationUser> userManager
 
         if (refreshToken is null || !refreshToken.IsActive)
         {
-            return Result.Failure<LoginDtoResponse>(LoginErrors.InvalidRefreshToken);
+            return Result.Failure<LoginResponse>(LoginErrors.InvalidRefreshToken);
         }
 
         refreshToken.RevokedOn = DateTime.UtcNow;
@@ -59,7 +59,7 @@ public class RefreshTokenCommandHandler(UserManager<ApplicationUser> userManager
 
         // Return the new JWT token and refresh token to the client
 
-        var response = new LoginDtoResponse
+        var response = new LoginResponse
         {
             UserId = user.Id,
             Email = user.Email!,
@@ -70,6 +70,6 @@ public class RefreshTokenCommandHandler(UserManager<ApplicationUser> userManager
             RefreshTokenExpiration = refreshTokenExpiration
         };
 
-        return Result.Success<LoginDtoResponse>(response,AuthMessages.RefreshTokenSuccess);
+        return Result.Success<LoginResponse>(response,AuthMessages.RefreshTokenSuccess);
     }
 }
