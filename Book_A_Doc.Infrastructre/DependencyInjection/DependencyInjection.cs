@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -59,6 +61,7 @@ public static class DependencyInjection
         });
 
         services.AddAuthConfig(configuration);
+        services.AddHangfireConfig(configuration);
 
         services.AddMailConfig(configuration);
 
@@ -127,6 +130,20 @@ public static class DependencyInjection
     {
         services.Configure<ApplicationSettings>(
     configuration.GetSection(ApplicationSettings.SectionName));
+        return services;
+    }
+
+    private static IServiceCollection AddHangfireConfig(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHangfire(cfg => cfg
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(
+            configuration.GetConnectionString("HangfireConnection")));
+
+        services.AddHangfireServer();
+
         return services;
     }
 }
