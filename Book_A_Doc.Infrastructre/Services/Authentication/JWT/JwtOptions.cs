@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Book_A_Doc.Infrastructre.JwtServices.OptionsClass;
+namespace Book_A_Doc.Infrastructre.Services.Authentication.JWT;
 
 public class JwtOptions
 {

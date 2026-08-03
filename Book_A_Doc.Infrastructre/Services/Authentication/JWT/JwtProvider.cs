@@ -1,6 +1,4 @@
 ﻿using Book_A_Doc.Domain.Models.Identity;
-using Book_A_Doc.Infrastructre.JwtServices;
-using Book_A_Doc.Infrastructre.JwtServices.OptionsClass;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,7 +6,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Book_A_Doc.Application.Services.Jwt_Service;
+namespace Book_A_Doc.Infrastructre.Services.Authentication.JWT;
 
 public class JwtProvider(IOptions<JwtOptions> jwtoptions) : IJwtProvider
 {
