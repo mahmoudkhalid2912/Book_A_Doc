@@ -1,4 +1,4 @@
-﻿namespace Book_A_Doc.Infrastructre.JwtServices.OptionsClass;
+﻿namespace Book_A_Doc.Infrastructre.Configurations;
 
 public class ApplicationSettings
 {
