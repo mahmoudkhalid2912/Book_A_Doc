@@ -13,7 +13,8 @@ public class SignUpCommandHandler(
     IApplicationSettings applicationSettings,
     IEmailTemplateService emailTemplateService,
     IAuthenticationService authenticationService,
-    IEmailService emailService)
+    IEmailService emailService,
+    IBackgroundService backgroundService)
     : IRequestHandler<SignUpCommand, Result>
 {
     public async Task<Result> Handle(
@@ -54,11 +55,13 @@ public class SignUpCommandHandler(
             user.FullName,
             confirmationLink);
 
-        await emailService.SendEmailAsync(
-            user.Email!,
-            AuthMessages.ConfirmationEmailSent,
-            emailBody);
 
+
+         backgroundService.Enqueue(() => emailService.SendEmailAsync(
+             user.Email!,
+             AuthMessages.ConfirmationEmailSent,
+             emailBody));
+       
         return Result.Success(AuthMessages.RegisterSuccess);
     }
 }

@@ -4,6 +4,7 @@ using Book_A_Doc.Infrastructre.Configurations;
 using Book_A_Doc.Infrastructre.Persistence;
 using Book_A_Doc.Infrastructre.Services.Authentication;
 using Book_A_Doc.Infrastructre.Services.Authentication.JWT;
+using Book_A_Doc.Infrastructre.Services.Background;
 using Book_A_Doc.Infrastructre.Services.Identity;
 using Book_A_Doc.Infrastructre.Services.Mail.Options;
 using Book_A_Doc.Infrastructre.Services.Mail.Service;
@@ -210,7 +211,7 @@ public static class DependencyInjection
         services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 
         services.AddScoped<IEmailService, EmailSender>();
-
+        services.AddScoped<IBackgroundService,HangfireService>();
 
         services.AddSingleton<IApplicationSettings, ApplicationSettingsProvider>();
 
