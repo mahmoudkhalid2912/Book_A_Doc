@@ -1,11 +1,11 @@
-﻿using Book_A_Doc.Application.Command.AuthCommands.LoginQuery;
+using Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
 using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using Book_A_Doc.Domain.ResultPattern.SuccesMessage;
 using MediatR;
 
-namespace Book_A_Doc.Application.Command.AuthCommands.RefreshTokenQuery;
+namespace Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 
 public class RefreshTokenCommandHandler(
     IJwtProvider jwtProvider,
@@ -59,6 +59,7 @@ public class RefreshTokenCommandHandler(
         var (newJwtToken, expiresIn) = jwtProvider.GenerateJwtToken(user);
 
         var newRefreshToken = jwtProvider.GenerateRefreshToken();
+
         var refreshTokenExpiration =
             DateTime.UtcNow.AddDays(RefreshTokenExpiryDays);
 
