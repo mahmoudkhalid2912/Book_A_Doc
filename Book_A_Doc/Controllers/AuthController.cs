@@ -1,9 +1,9 @@
 ﻿using Book_A_Doc.ApiResponse;
 using Book_A_Doc.Application.Command.AuthCommands.ConfirmEmailCommand;
+using Book_A_Doc.Application.Command.AuthCommands.LoginQuery;
+using Book_A_Doc.Application.Command.AuthCommands.RefreshTokenQuery;
 using Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
 using Book_A_Doc.Application.Command.AuthCommands.ResendConfiramationEmailCommand;
-using Book_A_Doc.Application.Quiers.AuthQuery.LoginQuery;
-using Book_A_Doc.Application.Quiers.AuthQuery.RefreshTokenQuery;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -8,13 +8,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Book_A_Doc.Domain\Book_A_Doc.Domain.csproj" />
-    <ProjectReference Include="..\Book_A_Doc.Infrastructre\Book_A_Doc.Infrastructre.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.12.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.12.0" />
     <PackageReference Include="MediatR" Version="13.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Quiers\AuthQuery\" />
   </ItemGroup>
 
 </Project>

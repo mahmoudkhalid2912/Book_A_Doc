@@ -1,20 +1,16 @@
-﻿using Book_A_Doc.Domain.Models.Identity;
+﻿using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using Book_A_Doc.Domain.ResultPattern.SuccesMessage;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.ConfirmEmailCommand;
 
-public class ConfirmEmailCommandHandler(UserManager<ApplicationUser> userManager) : IRequestHandler<ConfirmEmailCommand, Result>
+public class ConfirmEmailCommandHandler(IIdentityService identityService, ITokenEncoder tokenEncoder,IAuthenticationService authenticationService) : IRequestHandler<ConfirmEmailCommand, Result>
 {
     public async Task<Result> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
-        var user = await userManager.FindByIdAsync(request.UserId.ToString());
+        var user = await identityService.FindByIdAsync(request.UserId);
         if(user is null)
         {
             return Result.Failure(EmailConfirmationError.InvalidToken);
@@ -28,18 +24,17 @@ public class ConfirmEmailCommandHandler(UserManager<ApplicationUser> userManager
 
         try
         {
-            token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+            token = tokenEncoder.Decode(token);
         }
         catch (FormatException)
         {
             return Result.Failure(EmailConfirmationError.InvalidToken);
         }
-        var result = await userManager.ConfirmEmailAsync(user, token);
+        var result = await authenticationService.ConfirmEmailAsync(user, token);
 
-        if (!result.Succeeded)
+        if (result.IsFailure)
         {
-            var error = result.Errors.First();
-            return Result.Failure(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
+            return result;
         }
 
         return Result.Success(AuthMessages.EmailConfirmed);
