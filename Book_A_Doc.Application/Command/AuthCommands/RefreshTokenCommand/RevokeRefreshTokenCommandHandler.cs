@@ -1,46 +1,47 @@
-﻿using Book_A_Doc.Domain.Models.Identity;
+using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
-using Book_A_Doc.Infrastructre.JwtServices;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 
-public class RevokeRefreshTokenCommandHandler(UserManager<ApplicationUser> userManager, IJwtProvider jwtProvider) : IRequestHandler<RevokeRefreshTokenCommand, Result<bool>>
+public class RevokeRefreshTokenCommandHandler(
+    IJwtProvider jwtProvider,
+    IRefreshTokenService refreshTokenService)
+    : IRequestHandler<RevokeRefreshTokenCommand, Result<bool>>
 {
-    public async Task<Result<bool>> Handle(RevokeRefreshTokenCommand request, CancellationToken cancellationToken)
+    public async Task<Result<bool>> Handle(
+        RevokeRefreshTokenCommand request,
+        CancellationToken cancellationToken)
     {
-        // Validate the JWT token and get the user ID
-        var UserId = jwtProvider.ValidateToken(request.Token);
+        var userId = jwtProvider.ValidateToken(request.Token);
 
-        if (UserId is null)
+        if (userId is null)
         {
-            return Result.Failure<bool>(LoginErrors.InvalidCredentials);
+            return Result.Failure<bool>(
+                LoginErrors.InvalidCredentials);
         }
 
-        // Get the user from the database along with their refresh tokens
-        var user = await userManager.Users
-       .Include(x => x.RefreshTokens)
-      .FirstOrDefaultAsync(x => x.Id == UserId.Value, cancellationToken);
+        var user =
+            await refreshTokenService.FindByIdWithRefreshTokensAsync(
+                userId.Value);
 
-        if (user == null)
+        if (user is null)
         {
-            return Result.Failure<bool>(LoginErrors.InvalidCredentials);
+            return Result.Failure<bool>(
+                LoginErrors.InvalidCredentials);
         }
 
-        // Find the refresh token in the user's refresh tokens
-        var refreshToken = user.RefreshTokens
-       .SingleOrDefault(x => x.Token == request.RefreshToken);
+        var result =
+            await refreshTokenService.RevokeRefreshTokenAsync(
+                user,
+                request.RefreshToken);
 
-        if (refreshToken is null || !refreshToken.IsActive)
+        if (result.IsFailure)
         {
-            return Result.Failure<bool>(LoginErrors.InvalidRefreshToken);
+            return Result.Failure<bool>(result.Error);
         }
 
-        refreshToken.RevokedOn = DateTime.UtcNow;
-        await userManager.UpdateAsync(user);
         return Result.Success(true);
     }
 }

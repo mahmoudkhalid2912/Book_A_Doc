@@ -1,12 +1,11 @@
-﻿using Book_A_Doc.Domain.ResultPattern;
+using Book_A_Doc.Domain.ResultPattern;
 using MediatR;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 
-public class RevokeRefreshTokenCommand:IRequest<Result<bool>>
+public class RevokeRefreshTokenCommand : IRequest<Result<bool>>
 {
     public string Token { get; set; } = string.Empty;
 
     public string RefreshToken { get; set; } = string.Empty;
-
 }
