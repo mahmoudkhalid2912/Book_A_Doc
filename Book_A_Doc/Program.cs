@@ -1,6 +1,7 @@
 using Book_A_Doc.Application.DependencyInjection;
 using Book_A_Doc.DependencyInjection;
 using Hangfire;
+using Hangfire.Dashboard;
 using HangfireBasicAuthenticationFilter;
 using System.Reflection;
 
@@ -16,7 +17,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseHangfireDashboard("/jobs",new DashboardOptions
+    app.UseHangfireDashboard("/jobs", new DashboardOptions
     {
         Authorization = [
             new HangfireCustomBasicAuthenticationFilter{
@@ -24,7 +25,8 @@ if (app.Environment.IsDevelopment())
                 Pass = app.Configuration.GetValue<string>("HangfireSettings:Password")
             }
             ],
-       DashboardTitle = "Book-A-Doc  Dashboard"
+        DashboardTitle = "Book-A-Doc  Dashboard",
+        IsReadOnlyFunc = (DashboardContext context) => true
     });
 }
 
