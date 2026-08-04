@@ -3,7 +3,6 @@ using Book_A_Doc.DependencyInjection;
 using Hangfire;
 using Hangfire.Dashboard;
 using HangfireBasicAuthenticationFilter;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 

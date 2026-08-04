@@ -13,10 +13,9 @@ public interface IIdentityService
 
     Task<ApplicationUser?> FindByIdAsync(
         Guid userId);
-
+    
     Task<ApplicationUser?> FindByEmailAsync(
         string email);
-
     Task<Result> UpdateUserAsync(
         ApplicationUser user);
 }
