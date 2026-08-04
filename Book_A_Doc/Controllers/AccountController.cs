@@ -1,6 +1,7 @@
 ﻿using Book_A_Doc.API.Extensions;
 using Book_A_Doc.ApiResponse;
-using Book_A_Doc.Application.Command.Account;
+using Book_A_Doc.Application.Command.Account.ChangeUserPasswordCommand;
+using Book_A_Doc.Application.Command.Account.UpdateUserProfileCommand;
 using Book_A_Doc.Application.Queries.Account;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -22,12 +23,20 @@ public class AccountController() : ApiControllerBase
     }
 
     [HttpPut("profile")]
-    public async Task<IActionResult> UpdateProfile(UpdateUserCommand command,[FromServices] IMediator mediator)
+    public async Task<IActionResult> UpdateProfile([FromBody]UpdateUserCommand command,[FromServices] IMediator mediator)
     {
         command.UserId = User.GetUserId();
 
         var result = await mediator.Send(command);
 
+        return ToResponse(result);
+    }
+
+    [HttpPut("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody]ChangeUserPasswordCommand command, [FromServices] IMediator mediator)
+    {
+        command.UserId = User.GetUserId();
+        var result = await mediator.Send(command);
         return ToResponse(result);
     }
 }

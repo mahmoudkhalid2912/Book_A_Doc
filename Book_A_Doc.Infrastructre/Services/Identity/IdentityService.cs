@@ -1,6 +1,7 @@
 ﻿using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
+using Book_A_Doc.Domain.ResultPattern.SuccessMessages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -63,6 +64,21 @@ public class IdentityService(
         return Result.Success();
     }
 
-    
-    
+    public async Task<Result> ChangePasswordAsync(ApplicationUser user, string oldPassword, string newPassword)
+    {
+        var result = await userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+
+        if (!result.Succeeded)
+        {
+            var error = result.Errors.First();
+
+            return Result.Failure(
+                new Error(
+                    error.Code,
+                    error.Description,
+                    StatusCodes.BadRequest));
+        }
+
+        return Result.Success(AccountMessages.PasswordChangedSuccessfully);
+    }
 }

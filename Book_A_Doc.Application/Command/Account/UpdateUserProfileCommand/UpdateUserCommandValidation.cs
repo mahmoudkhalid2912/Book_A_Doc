@@ -1,7 +1,7 @@
 ﻿using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using FluentValidation;
 
-namespace Book_A_Doc.Application.Command.Account;
+namespace Book_A_Doc.Application.Command.Account.UpdateUserProfileCommand;
 
 public class UpdateUserCommandValidation:AbstractValidator<UpdateUserCommand>
 {

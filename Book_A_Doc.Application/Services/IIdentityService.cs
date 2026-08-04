@@ -18,4 +18,9 @@ public interface IIdentityService
         string email);
     Task<Result> UpdateUserAsync(
         ApplicationUser user);
+
+    Task<Result> ChangePasswordAsync(
+        ApplicationUser user,
+        string oldPassword,
+        string newPassword);
 }
