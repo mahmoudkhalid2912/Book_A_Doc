@@ -2,6 +2,7 @@
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Infrastructre.Configurations;
 using Book_A_Doc.Infrastructre.Persistence;
+using Book_A_Doc.Infrastructre.Services.Account;
 using Book_A_Doc.Infrastructre.Services.Authentication;
 using Book_A_Doc.Infrastructre.Services.Authentication.JWT;
 using Book_A_Doc.Infrastructre.Services.Background;
@@ -212,6 +213,7 @@ public static class DependencyInjection
 
         services.AddScoped<IEmailService, EmailSender>();
         services.AddScoped<IBackgroundService,HangfireService>();
+        services.AddScoped<IUserService, UserService>();
 
         services.AddSingleton<IApplicationSettings, ApplicationSettingsProvider>();
 
