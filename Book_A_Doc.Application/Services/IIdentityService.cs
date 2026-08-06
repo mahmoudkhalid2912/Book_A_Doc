@@ -23,4 +23,6 @@ public interface IIdentityService
         ApplicationUser user,
         string oldPassword,
         string newPassword);
+
+    Task<Result> ResetPasswordAsync(string Email,string NewPassword);
 }

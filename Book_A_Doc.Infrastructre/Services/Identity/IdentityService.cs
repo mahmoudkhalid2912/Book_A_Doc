@@ -1,6 +1,7 @@
 ﻿using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
+using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using Book_A_Doc.Domain.ResultPattern.SuccessMessages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -80,5 +81,26 @@ public class IdentityService(
         }
 
         return Result.Success(AccountMessages.PasswordChangedSuccessfully);
+    }
+
+    public async Task<Result> ResetPasswordAsync(string Email, string NewPassword)
+    {
+        var user = await userManager.FindByEmailAsync(Email);
+
+        if (user is null)
+            return Result.Failure(UserErrors.UserNotFound);
+
+
+        user.PasswordHash = userManager
+            .PasswordHasher
+            .HashPassword(user, NewPassword);
+
+
+        var result = await userManager.UpdateAsync(user);
+
+
+        return result.Succeeded
+            ? Result.Success()
+            : Result.Failure(AuthErrors.PasswordResetFailed);
     }
 }
