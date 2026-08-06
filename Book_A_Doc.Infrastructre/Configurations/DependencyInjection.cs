@@ -9,6 +9,7 @@ using Book_A_Doc.Infrastructre.Services.Background;
 using Book_A_Doc.Infrastructre.Services.Identity;
 using Book_A_Doc.Infrastructre.Services.Mail.Options;
 using Book_A_Doc.Infrastructre.Services.Mail.Service;
+using Book_A_Doc.Infrastructre.Services.OTP;
 using Book_A_Doc.Infrastructre.Services.RefreshTokens;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -70,6 +71,7 @@ public static class DependencyInjection
         services.AddApplicationSettings(configuration);
 
         services.AddInfrastructureServices();
+        services.AddDistributedMemoryCache();
 
 
         return services;
@@ -214,6 +216,7 @@ public static class DependencyInjection
         services.AddScoped<IEmailService, EmailSender>();
         services.AddScoped<IBackgroundService,HangfireService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IOtpService, OTPService>();
 
         services.AddSingleton<IApplicationSettings, ApplicationSettingsProvider>();
 
