@@ -13,12 +13,12 @@ public class ConfirmEmailCommandHandler(IIdentityService identityService, IToken
         var user = await identityService.FindByIdAsync(request.UserId);
         if(user is null)
         {
-            return Result.Failure(EmailConfirmationError.InvalidToken);
+            return Result.Failure(AuthErrors.InvalidConfirmationToken);
         }
 
         if(user.EmailConfirmed)
         {
-            return Result.Failure(EmailConfirmationError.DuplicatedConfirmation);
+            return Result.Failure(AuthErrors.EmailAlreadyConfirmed);
         }
         var token = request.Token;
 
@@ -28,7 +28,7 @@ public class ConfirmEmailCommandHandler(IIdentityService identityService, IToken
         }
         catch (FormatException)
         {
-            return Result.Failure(EmailConfirmationError.InvalidToken);
+            return Result.Failure(AuthErrors.InvalidConfirmationToken);
         }
         var result = await authenticationService.ConfirmEmailAsync(user, token);
 
