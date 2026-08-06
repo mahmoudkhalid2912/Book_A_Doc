@@ -70,4 +70,5 @@ public static class RegisterErrors
 
     public static readonly Error UserMustBeAtLeast15YearsOld =
         new("Register.UserMustBeAtLeast15YearsOld", "You must be at least 15 years old.", 400);
+    
 }
