@@ -16,7 +16,7 @@ public class LoginCommandHandler(IIdentityService identityService,IJwtProvider j
 
         if (User == null) 
         { 
-            return Result.Failure<LoginResponse>(LoginErrors.InvalidCredentials);
+            return Result.Failure<LoginResponse>(AuthErrors.InvalidCredentials);
         }
 
 

@@ -18,7 +18,7 @@ public class RevokeRefreshTokenCommandHandler(
         if (userId is null)
         {
             return Result.Failure<bool>(
-                LoginErrors.InvalidCredentials);
+                AuthErrors.InvalidCredentials);
         }
 
         var user =
@@ -28,7 +28,7 @@ public class RevokeRefreshTokenCommandHandler(
         if (user is null)
         {
             return Result.Failure<bool>(
-                LoginErrors.InvalidCredentials);
+                AuthErrors.InvalidCredentials);
         }
 
         var result =
