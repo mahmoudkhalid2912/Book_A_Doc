@@ -22,9 +22,7 @@ public class ResetPasswordCommandValidation:AbstractValidator<ResetPasswordComma
                 .WithMessage(AuthErrors.GmailOnly.Description);
         });
 
-        //Code
-        RuleFor(x => x.Code).
-            Cascade(CascadeMode.Stop).NotEmpty();
+        
 
         // NewPassword
         // Password

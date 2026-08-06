@@ -4,9 +4,17 @@ namespace Book_A_Doc.Application.Services;
 
 public interface IOtpService
 {
-    Task<string> GenerateAndStoreAsync(string key, TimeSpan expiration);
+    Task<string> GenerateAndStoreAsync(
+        string key,
+        TimeSpan expiration);
 
-    Task<bool> ValidateAsync(string key, string code);
+    Task<bool> ValidateAsync(
+        string key,
+        string code);
 
-    Task RemoveAsync(string key);
+    Task<bool> IsVerifiedAsync(
+        string key);
+
+    Task RemoveAsync(
+        string key);
 }

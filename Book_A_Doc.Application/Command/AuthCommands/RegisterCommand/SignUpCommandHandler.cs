@@ -25,7 +25,7 @@ public class SignUpCommandHandler(
 
         if (emailExists)
         {
-            return Result.Failure(RegisterErrors.UserAlreadyExists);
+            return Result.Failure(AuthErrors.UserAlreadyExists);
         }
 
         var user = new ApplicationUser

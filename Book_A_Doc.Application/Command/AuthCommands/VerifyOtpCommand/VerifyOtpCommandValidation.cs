@@ -11,15 +11,15 @@ public class VerifyOtpCommandValidation:AbstractValidator<VerifyOtpCommand>
         RuleFor(x => x.Email)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .WithMessage(RegisterErrors.EmailRequired.Description);
+            .WithMessage(AuthErrors.EmailRequired.Description);
 
         When(x => !string.IsNullOrWhiteSpace(x.Email), () =>
         {
             RuleFor(x => x.Email)
                 .EmailAddress()
-                .WithMessage(RegisterErrors.InvalidEmailFormat.Description)
+                .WithMessage(AuthErrors.InvalidEmailFormat.Description)
                 .Must(email => email.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase))
-                .WithMessage(RegisterErrors.GmailOnly.Description);
+                .WithMessage(AuthErrors.GmailOnly.Description);
         });
 
         //Code

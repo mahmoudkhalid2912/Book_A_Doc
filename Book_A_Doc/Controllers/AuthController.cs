@@ -5,6 +5,7 @@ using Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
 using Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 using Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
 using Book_A_Doc.Application.Command.AuthCommands.ResendConfiramationEmailCommand;
+using Book_A_Doc.Application.Command.AuthCommands.ResetPasswordCommand;
 using Book_A_Doc.Application.Command.AuthCommands.VerifyOtpCommand;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -81,6 +82,14 @@ public class AuthController : ApiControllerBase
     [HttpPost("VerifyOtp")]
     public async Task<IActionResult> VerifyOtp(
         [FromBody] VerifyOtpCommand command,
+        [FromServices] IMediator mediator)
+    {
+        var result = await mediator.Send(command);
+        return ToResponse(result);
+    }
+    [HttpPost("ResetPassword")]
+    public async Task<IActionResult> ResetPassword(
+        [FromBody] ResetPasswordCommand command,
         [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(command);

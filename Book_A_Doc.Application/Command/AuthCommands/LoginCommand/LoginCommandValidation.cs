@@ -6,9 +6,9 @@ public class LoginCommandValidation:AbstractValidator<LoginCommand>
 {
     public LoginCommandValidation()
     {
-        RuleFor(x => x.Email).NotEmpty().WithMessage(LoginErrors.EmailIsRequried.Description)
-            .EmailAddress().WithMessage(LoginErrors.InvalidEmailFormat.Description);
+        RuleFor(x => x.Email).NotEmpty().WithMessage(AuthErrors.EmailRequired.Description)
+            .EmailAddress().WithMessage(AuthErrors.InvalidEmailFormat.Description);
 
-        RuleFor(x => x.Password).NotEmpty().WithMessage(LoginErrors.PasswordIsRequried.Description);
+        RuleFor(x => x.Password).NotEmpty().WithMessage(AuthErrors.PasswordRequired.Description);
     }
 }

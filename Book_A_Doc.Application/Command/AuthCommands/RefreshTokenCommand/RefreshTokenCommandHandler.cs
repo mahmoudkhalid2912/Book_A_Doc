@@ -23,7 +23,7 @@ public class RefreshTokenCommandHandler(
 
         if (userId is null)
         {
-            return Result.Failure<LoginResponse>(LoginErrors.InvalidCredentials);
+            return Result.Failure<LoginResponse>(AuthErrors.InvalidCredentials);
         }
 
         // Get user with refresh tokens
@@ -31,7 +31,7 @@ public class RefreshTokenCommandHandler(
 
         if (user is null)
         {
-            return Result.Failure<LoginResponse>(LoginErrors.InvalidCredentials);
+            return Result.Failure<LoginResponse>(AuthErrors.InvalidCredentials);
         }
 
         // Validate refresh token
