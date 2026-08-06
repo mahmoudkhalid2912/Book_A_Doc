@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.VerifyOtpCommand;
 
-public class VerifyOtpCodeCommandHandler(IOtpService otpService) : IRequestHandler<VerifyOtpCommand, Result>
+public class VerifyOtpCodeCommandHandler(IOtpService otpService) : IRequestHandler<VerifyOtpCommand, Result<string>>
 {
-    public async Task<Result> Handle(VerifyOtpCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(VerifyOtpCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = $"forgot-password:{request.Email}";
 
@@ -18,9 +18,9 @@ public class VerifyOtpCodeCommandHandler(IOtpService otpService) : IRequestHandl
 
         if (!isOtpValid)
         {
-            return Result.Failure(EmailConfirmationError.InvalidOtp);
+            return Result.Failure<string>(EmailConfirmationError.InvalidOtp);
         }
 
-        return Result.Success(AuthMessages.OtpVerified);
+        return Result.Success<string>(request.Code,AuthMessages.OtpVerified);
     }
 }

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Book_A_Doc.Application.Command.AuthCommands.VerifyOtpCommand;
 
-public class VerifyOtpCommand:IRequest<Result>
+public class VerifyOtpCommand:IRequest<Result<string>>
 {
     public string Email { get; set; } = string.Empty;
 
