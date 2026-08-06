@@ -5,6 +5,8 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
+namespace Book_A_Doc.Infrastructre.Services.Mail.Service;
+
 public class EmailSender(IOptions<MailOptions> mailOptions)
     : IEmailService
 {

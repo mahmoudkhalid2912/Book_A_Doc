@@ -4,7 +4,7 @@ using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using Book_A_Doc.Domain.ResultPattern.SuccessMessages;
 using MediatR;
 
-namespace Book_A_Doc.Application.Command.Account;
+namespace Book_A_Doc.Application.Command.Account.UpdateUserProfileCommand;
 
 public class UpdateUserCommandHandler(IIdentityService identityService):IRequestHandler<UpdateUserCommand,Result<bool>>
 {

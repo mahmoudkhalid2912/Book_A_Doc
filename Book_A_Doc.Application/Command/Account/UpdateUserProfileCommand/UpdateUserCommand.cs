@@ -2,7 +2,7 @@
 using MediatR;
 using System.Text.Json.Serialization;
 
-namespace Book_A_Doc.Application.Command.Account;
+namespace Book_A_Doc.Application.Command.Account.UpdateUserProfileCommand;
 
 public  class UpdateUserCommand : IRequest<Result<bool>>
 {

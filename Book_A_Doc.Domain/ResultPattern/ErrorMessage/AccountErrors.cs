@@ -23,4 +23,45 @@ public static class AccountErrors
         , "Unable to update user"
         , 400
         );
+    public static readonly Error OldPasswordRequired = new(
+     "AccountErrors.OldPasswordRequired",
+     "Old password is required.",
+     400
+ );
+
+    public static readonly Error PasswordRequired = new(
+        "AccountErrors.PasswordRequired",
+        "Password is required.",
+        400
+    );
+
+    public static readonly Error PasswordTooShort = new(
+        "AccountErrors.PasswordTooShort",
+        "Password must be at least 6 characters long.",
+        400
+    );
+
+    public static readonly Error PasswordRequiresLowercase = new(
+        "AccountErrors.PasswordRequiresLowercase",
+        "Password must contain at least one lowercase letter.",
+        400
+    );
+
+    public static readonly Error PasswordRequiresUppercase = new(
+        "AccountErrors.PasswordRequiresUppercase",
+        "Password must contain at least one uppercase letter.",
+        400
+    );
+
+    public static readonly Error PasswordRequiresSpecialCharacter = new(
+        "AccountErrors.PasswordRequiresSpecialCharacter",
+        "Password must contain at least one special character.",
+        400
+    );
+
+    public static readonly Error NewPasswordCannotBeSameAsOld = new(
+        "AccountErrors.NewPasswordCannotBeSameAsOld",
+        "New password cannot be the same as the old password.",
+        400
+    );
 }
