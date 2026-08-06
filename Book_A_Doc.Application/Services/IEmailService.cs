@@ -1,8 +1,9 @@
-﻿
-
-namespace Book_A_Doc.Application.Services;
+﻿namespace Book_A_Doc.Application.Services;
 
 public interface IEmailService
 {
-    Task SendEmailAsync(string to, string subject, string body);
+    Task SendEmailAsync(
+        string to,
+        string subject,
+        string body);
 }

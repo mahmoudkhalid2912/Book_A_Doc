@@ -1,5 +1,6 @@
 using Book_A_Doc.ApiResponse;
 using Book_A_Doc.Application.Command.AuthCommands.ConfirmEmailCommand;
+using Book_A_Doc.Application.Command.AuthCommands.ForgetPasswordCommand;
 using Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
 using Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 using Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
@@ -61,6 +62,15 @@ public class AuthController : ApiControllerBase
     [HttpPost("ResendConfirmationEmail")]
     public async Task<IActionResult> ResendConfirmationEmail(
         [FromBody] ResendEmailConfiramtionCommand command,
+        [FromServices] IMediator mediator)
+    {
+        var result = await mediator.Send(command);
+        return ToResponse(result);
+    }
+
+    [HttpPost("ForgetPassword")]
+    public async Task<IActionResult> ForgetPassword(
+        [FromBody] ForgetPasswordCommand command,
         [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(command);
