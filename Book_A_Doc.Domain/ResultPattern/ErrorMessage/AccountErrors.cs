@@ -2,6 +2,7 @@
 
 public static class AccountErrors
 {
+   
     public static readonly Error UserNameIsTooLong =
         new("AccountErrors.UserNameIsTooLong"
             , "Name Is Too Long it should be less than 100 characters"
@@ -64,4 +65,6 @@ public static class AccountErrors
         "New password cannot be the same as the old password.",
         400
     );
+
+    
 }

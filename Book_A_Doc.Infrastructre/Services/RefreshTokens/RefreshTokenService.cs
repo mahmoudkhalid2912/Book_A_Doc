@@ -62,7 +62,7 @@ public class RefreshTokenService(
         {
             return Task.FromResult(
                 Result.Failure(
-                    LoginErrors.InvalidRefreshToken));
+                    AuthErrors.InvalidRefreshToken));
         }
 
 
@@ -82,7 +82,7 @@ public class RefreshTokenService(
         if (token is null)
         {
             return Result.Failure(
-                LoginErrors.InvalidRefreshToken);
+                AuthErrors.InvalidRefreshToken);
         }
 
 

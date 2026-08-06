@@ -59,11 +59,11 @@ public class AuthenticationService(
         if (result.IsNotAllowed)
         {
             return Result.Failure(
-                LoginErrors.EmailNotConfirmed);
+                AuthErrors.EmailNotConfirmed);
         }
 
 
         return Result.Failure(
-            LoginErrors.InvalidCredentials);
+            AuthErrors.InvalidCredentials);
     }
 }
