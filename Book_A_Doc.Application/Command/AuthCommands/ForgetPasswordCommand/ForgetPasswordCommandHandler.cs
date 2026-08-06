@@ -17,9 +17,11 @@ public class ForgetPasswordCommandHandler(IIdentityService identityService,IOtpS
             return Result.Success(AuthMessages.OtpSent);
         }
 
+        var cacheKey = $"forgot-password:{user.Email!}";
+
         var code = await otpService.GenerateAndStoreAsync(
-     $"forgot-password:{user.Id}",
-          TimeSpan.FromMinutes(10));
+            cacheKey,
+            TimeSpan.FromMinutes(10));
 
         var emailBody = emailTemplateService.GenerateForgotPasswordTemplate(
     user.FullName,

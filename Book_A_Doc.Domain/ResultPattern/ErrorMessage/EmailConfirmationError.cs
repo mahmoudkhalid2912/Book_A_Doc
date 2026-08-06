@@ -30,4 +30,9 @@ public static class EmailConfirmationError
         "ConfirmEmail.InvalidEmail"
         , "Invalid email format."
         , 400); 
+
+    public static readonly Error InvalidOtp=new(
+        "ConfirmEmail.InvalidOtp"
+        , "Invalid OTP code."
+        , 400);
 }
