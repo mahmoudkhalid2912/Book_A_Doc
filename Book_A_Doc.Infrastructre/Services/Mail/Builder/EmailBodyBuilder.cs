@@ -14,7 +14,7 @@ public static class EmailBodyBuilder
             currentDirectory,
             "Templates",
             $"{templateName}.html");
-
+        
         if (!File.Exists(templatePath))
         {
             throw new FileNotFoundException(

@@ -17,4 +17,17 @@ public class EmailTemplateService : IEmailTemplateService
                 { "ConfirmationLink", confirmationLink }
             });
     }
+
+    public string GenerateForgotPasswordTemplate(
+    string userName,
+    string otp)
+    {
+        return EmailBodyBuilder.GenerateEmailBody(
+            "ForgetPassword",
+            new Dictionary<string, string>
+            {
+            { "UserName", userName },
+            { "OTP", otp }
+            });
+    }
 }
