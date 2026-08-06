@@ -18,14 +18,12 @@ public class ResetPasswordCommandHandler(
         // 1- Validate OTP
         var cacheKey = $"forgot-password:{request.Email}";
 
-        var isOtpValid = await otpService.ValidateAsync(
-            cacheKey,
-            request.Code);
+        var isVerified = await otpService.IsVerifiedAsync(cacheKey);
 
-        if (!isOtpValid)
+        if (!isVerified)
         {
             return Result.Failure(
-                EmailConfirmationError.InvalidOtp);
+                AuthErrors.InvalidOtp);
         }
 
 
