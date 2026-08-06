@@ -14,6 +14,8 @@ public static class AuthMessages
 
     public const string OtpSent = "OTP Sent Successfully";
 
+    public const string OtpVerified = "OTP Verified Successfully";
+
     public const string PasswordResetEmailSent = "Password Reset Email Sent Successfully";
 
     public const string PasswordResetSuccess = "Password Reset Successfully";

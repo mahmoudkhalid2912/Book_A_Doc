@@ -5,6 +5,7 @@ using Book_A_Doc.Application.Command.AuthCommands.LoginCommand;
 using Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 using Book_A_Doc.Application.Command.AuthCommands.RegisterCommand;
 using Book_A_Doc.Application.Command.AuthCommands.ResendConfiramationEmailCommand;
+using Book_A_Doc.Application.Command.AuthCommands.VerifyOtpCommand;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -71,6 +72,15 @@ public class AuthController : ApiControllerBase
     [HttpPost("ForgetPassword")]
     public async Task<IActionResult> ForgetPassword(
         [FromBody] ForgetPasswordCommand command,
+        [FromServices] IMediator mediator)
+    {
+        var result = await mediator.Send(command);
+        return ToResponse(result);
+    }
+
+    [HttpPost("VerifyOtp")]
+    public async Task<IActionResult> VerifyOtp(
+        [FromBody] VerifyOtpCommand command,
         [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(command);
