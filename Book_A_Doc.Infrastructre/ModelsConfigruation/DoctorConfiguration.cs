@@ -21,6 +21,10 @@ public class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
         builder.Property(d => d.Description)
             .HasMaxLength(1000);
 
+        builder.Property(d => d.Specialty)
+       .HasMaxLength(100)
+        .IsRequired();
+
         builder.Property(d => d.YearsOfExperience)
             .IsRequired();
 
