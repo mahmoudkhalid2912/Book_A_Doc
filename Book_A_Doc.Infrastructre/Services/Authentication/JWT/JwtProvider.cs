@@ -10,16 +10,32 @@ namespace Book_A_Doc.Infrastructre.Services.Authentication.JWT;
 
 public class JwtProvider(IOptions<JwtOptions> jwtoptions) : IJwtProvider
 {
-    public (string Token, int ExpiresIn) GenerateJwtToken(ApplicationUser user)
+    public (string Token, int ExpiresIn) GenerateJwtToken(ApplicationUser user, IEnumerable<string> roles)
     {
         // Add Claims to the token
-        Claim[] claims = new Claim[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim  (JwtRegisteredClaimNames.Email, user.Email!),
-            new Claim(JwtRegisteredClaimNames.Name,user.FullName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
+        var claims = new List<Claim>
+    {
+        new(
+            JwtRegisteredClaimNames.Sub,
+            user.Id.ToString()),
+
+        new(
+            JwtRegisteredClaimNames.Email,
+            user.Email!),
+
+        new(
+            JwtRegisteredClaimNames.Name,
+            user.FullName),
+
+        new(
+            JwtRegisteredClaimNames.Jti,
+            Guid.NewGuid().ToString())
+    };
+
+        // Add Roles
+        claims.AddRange(
+            roles.Select(role =>
+                new Claim(ClaimTypes.Role, role)));
 
         // Create a symmetric security key
         var SymmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtoptions.Value.Key));

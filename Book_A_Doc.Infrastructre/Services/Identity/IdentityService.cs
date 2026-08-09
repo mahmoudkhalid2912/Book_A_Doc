@@ -153,4 +153,7 @@ public class IdentityService(
             throw;
         }
     }
+
+    public async Task<IList<string>> GetRolesAsync(ApplicationUser user)
+        => await userManager.GetRolesAsync(user);
 }
