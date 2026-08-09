@@ -94,7 +94,7 @@ public static class DependencyInjection
                 "JWT configuration is missing.");
 
 
-        services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
+        services.AddIdentity<ApplicationUser, ApplicationRole>()
             .AddEntityFrameworkStores<Book_A_Doc_Context>()
             .AddDefaultTokenProviders();
 

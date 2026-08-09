@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Book_A_Doc.Infrastructre.Persistence;
 
-public class Book_A_Doc_Context(DbContextOptions<Book_A_Doc_Context> dbContextOptions):IdentityDbContext<ApplicationUser,IdentityRole<Guid>, Guid>(dbContextOptions)
+public class Book_A_Doc_Context(DbContextOptions<Book_A_Doc_Context> dbContextOptions):IdentityDbContext<ApplicationUser,ApplicationRole, Guid>(dbContextOptions)
 {
    public DbSet<Patient> Patients { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
