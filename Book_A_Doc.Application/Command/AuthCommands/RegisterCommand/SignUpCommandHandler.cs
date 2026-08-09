@@ -1,4 +1,5 @@
 ﻿using Book_A_Doc.Application.Services;
+using Book_A_Doc.Domain.Consts;
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
@@ -21,11 +22,13 @@ public class SignUpCommandHandler(
         SignUpCommand request,
         CancellationToken cancellationToken)
     {
-        var emailExists = await identityService.EmailExistsAsync(request.Email);
+        var emailExists =
+            await identityService.EmailExistsAsync(request.Email);
 
         if (emailExists)
         {
-            return Result.Failure(AuthErrors.UserAlreadyExists);
+            return Result.Failure(
+                AuthErrors.UserAlreadyExists);
         }
 
         var user = new ApplicationUser
@@ -37,31 +40,44 @@ public class SignUpCommandHandler(
             PhoneNumber = request.PhoneNumber
         };
 
-        var createResult = await identityService.CreateUserAsync(user, request.Password);
+        // Create User + Assign Patient Role inside transaction
+        var createResult =
+            await identityService.CreateUserWithRoleAsync(
+                user,
+                request.Password,
+                DefaultRoles.Patient);
 
         if (createResult.IsFailure)
         {
             return createResult;
         }
 
-        var token = await authenticationService.GenerateEmailConfirmationTokenAsync(user);
+        // Generate email confirmation token
+        var token =
+            await authenticationService
+                .GenerateEmailConfirmationTokenAsync(user);
+
         token = tokenEncoder.Encode(token);
 
+        // Generate confirmation link
         var confirmationLink =
             $"{applicationSettings.BaseUrl}/api/Auth/ConfirmEmail" +
             $"?userId={user.Id}&token={token}";
 
-        var emailBody = emailTemplateService.GenerateEmailConfirmationTemplate(
-            user.FullName,
-            confirmationLink);
+        // Generate email body
+        var emailBody =
+            emailTemplateService.GenerateEmailConfirmationTemplate(
+                user.FullName,
+                confirmationLink);
 
+        // Send email as background job
+        backgroundService.Enqueue(() =>
+            emailService.SendEmailAsync(
+                user.Email!,
+                AuthMessages.ConfirmationEmailSent,
+                emailBody));
 
-
-         backgroundService.Enqueue(() => emailService.SendEmailAsync(
-             user.Email!,
-             AuthMessages.ConfirmationEmailSent,
-             emailBody));
-       
-        return Result.Success(AuthMessages.RegisterSuccess);
+        return Result.Success(
+            AuthMessages.RegisterSuccess);
     }
 }

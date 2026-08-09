@@ -183,4 +183,10 @@ public static class AuthErrors
             "Auth.PasswordChangedSuccessfully",
             "Password changed successfully.",
             200);
+
+    public static readonly Error RoleAssignmentFailed = new(
+        "Auth.RoleAssignmentFailed",
+        "Failed to assign role.",
+        400
+    );
 }
