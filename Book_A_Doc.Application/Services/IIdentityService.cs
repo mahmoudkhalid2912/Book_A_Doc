@@ -27,4 +27,7 @@ public interface IIdentityService
     Task<Result> ResetPasswordAsync(string Email,string NewPassword);
     Task AddToRoleAsync(ApplicationUser user, string Role);
     Task<Result> CreateUserWithRoleAsync(ApplicationUser user, string password, string role);
+
+    Task<IList<string>> GetRolesAsync(
+    ApplicationUser user);
 }

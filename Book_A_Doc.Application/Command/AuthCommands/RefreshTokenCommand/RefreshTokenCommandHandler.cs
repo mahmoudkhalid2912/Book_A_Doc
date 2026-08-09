@@ -9,7 +9,8 @@ namespace Book_A_Doc.Application.Command.AuthCommands.RefreshTokenCommand;
 
 public class RefreshTokenCommandHandler(
     IJwtProvider jwtProvider,
-    IRefreshTokenService refreshTokenService)
+    IRefreshTokenService refreshTokenService,
+    IIdentityService identityService)
     : IRequestHandler<RefreshTokenCommand, Result<LoginResponse>>
 {
     private const int RefreshTokenExpiryDays = 30;
@@ -55,8 +56,12 @@ public class RefreshTokenCommandHandler(
             return Result.Failure<LoginResponse>(revokeResult.Error);
         }
 
+        // Get user roles
+        var roles = await identityService.GetRolesAsync(user);
+
+
         // Generate new tokens
-        var (newJwtToken, expiresIn) = jwtProvider.GenerateJwtToken(user);
+        var (newJwtToken, expiresIn) = jwtProvider.GenerateJwtToken(user, roles);
 
         var newRefreshToken = jwtProvider.GenerateRefreshToken();
 
