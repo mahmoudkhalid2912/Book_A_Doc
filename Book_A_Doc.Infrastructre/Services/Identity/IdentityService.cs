@@ -3,13 +3,14 @@ using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
 using Book_A_Doc.Domain.ResultPattern.SuccessMessages;
+using Book_A_Doc.Infrastructre.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Book_A_Doc.Infrastructre.Services.Identity;
 
 public class IdentityService(
-    UserManager<ApplicationUser> userManager)
+    UserManager<ApplicationUser> userManager, Book_A_Doc_Context context)
     : IIdentityService
 {
     public async Task<ApplicationUser?> FindByIdAsync(Guid userId)
@@ -102,5 +103,54 @@ public class IdentityService(
         return result.Succeeded
             ? Result.Success()
             : Result.Failure(AuthErrors.PasswordResetFailed);
+    }
+
+    public async Task AddToRoleAsync(ApplicationUser user, string Role)
+    => await userManager.AddToRoleAsync(user, Role);
+
+    public async Task<Result> CreateUserWithRoleAsync(
+     ApplicationUser user,
+     string password,
+     string role)
+    {
+        await using var transaction =
+            await context.Database.BeginTransactionAsync();
+
+        try
+        {
+            // 1. Create User
+            var createResult =
+                await userManager.CreateAsync(user, password);
+
+            if (!createResult.Succeeded)
+            {
+                await transaction.RollbackAsync();
+
+                return Result.Failure(
+                    AuthErrors.UserCreationFailed);
+            }
+
+            // 2. Assign Role
+            var roleResult =
+                await userManager.AddToRoleAsync(user, role);
+
+            if (!roleResult.Succeeded)
+            {
+                await transaction.RollbackAsync();
+
+                return Result.Failure(
+                    AuthErrors.RoleAssignmentFailed);
+            }
+
+            // 3. Commit Transaction
+            await transaction.CommitAsync();
+
+            return Result.Success();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 }
