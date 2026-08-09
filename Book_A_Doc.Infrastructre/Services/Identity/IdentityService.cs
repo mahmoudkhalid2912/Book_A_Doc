@@ -10,7 +10,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Book_A_Doc.Infrastructre.Services.Identity;
 
 public class IdentityService(
-    UserManager<ApplicationUser> userManager, Book_A_Doc_Context context)
+    UserManager<ApplicationUser> userManager
+    , Book_A_Doc_Context context,
+    RoleManager<ApplicationRole> roleManager)
     : IIdentityService
 {
     public async Task<ApplicationUser?> FindByIdAsync(Guid userId)
@@ -154,6 +156,14 @@ public class IdentityService(
         }
     }
 
-    public async Task<IList<string>> GetRolesAsync(ApplicationUser user)
+    public async Task<IList<string>> GetUserRolesAsync(ApplicationUser user)
         => await userManager.GetRolesAsync(user);
+
+    public async Task<List<ApplicationRole>> GetAllRolesAsync(
+      CancellationToken cancellationToken)
+    {
+        return await roleManager.Roles
+            .ToListAsync(cancellationToken);
+    }
 }
+        

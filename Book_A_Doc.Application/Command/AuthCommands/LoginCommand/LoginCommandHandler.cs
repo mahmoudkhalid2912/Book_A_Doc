@@ -28,7 +28,7 @@ public class LoginCommandHandler(IIdentityService identityService,IJwtProvider j
             return Result.Failure<LoginResponse>(result.Error);
         }
         //Get Roles
-        var roles= await identityService.GetRolesAsync(User);
+        var roles= await identityService.GetUserRolesAsync(User);
         // Generate JWT Token
         var (token, expiresIn) = jwtProvider.GenerateJwtToken(User, roles);
         // Generate Refresh Token
