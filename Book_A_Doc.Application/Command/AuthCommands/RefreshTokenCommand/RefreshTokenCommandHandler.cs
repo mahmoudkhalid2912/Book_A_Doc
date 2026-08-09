@@ -57,7 +57,7 @@ public class RefreshTokenCommandHandler(
         }
 
         // Get user roles
-        var roles = await identityService.GetRolesAsync(user);
+        var roles = await identityService.GetUserRolesAsync(user);
 
 
         // Generate new tokens

@@ -28,6 +28,9 @@ public interface IIdentityService
     Task AddToRoleAsync(ApplicationUser user, string Role);
     Task<Result> CreateUserWithRoleAsync(ApplicationUser user, string password, string role);
 
-    Task<IList<string>> GetRolesAsync(
+    Task<IList<string>> GetUserRolesAsync(
     ApplicationUser user);
+
+    Task<List<ApplicationRole>> GetAllRolesAsync(
+    CancellationToken cancellationToken);
 }
