@@ -72,7 +72,6 @@ public class AuthController : ApiControllerBase
     }
     
     [HttpPost("ForgetPassword")]
-    [AllowAnonymous]
     public async Task<IActionResult> ForgetPassword(
         [FromBody] ForgetPasswordCommand command,
         [FromServices] IMediator mediator)
