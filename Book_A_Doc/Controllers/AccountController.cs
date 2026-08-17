@@ -2,6 +2,8 @@
 using Book_A_Doc.Application.Command.Account.ChangeUserPasswordCommand;
 using Book_A_Doc.Application.Command.Account.UpdateUserProfileCommand;
 using Book_A_Doc.Application.Queries.Account;
+using Book_A_Doc.Application.Queries.Account.GetAllUsers;
+using Book_A_Doc.Application.Queries.Account.GetUserProfile;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +38,14 @@ public class AccountController() : ApiControllerBase
     {
         command.UserId = User.GetUserId();
         var result = await mediator.Send(command);
+        return ToResponse(result);
+    }
+
+    [HttpGet("all-users")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetAllUsers([FromServices] IMediator mediator)
+    {
+        var result = await mediator.Send(new GetAllUserQuery());
         return ToResponse(result);
     }
 }

@@ -4,7 +4,7 @@ using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.ResultPattern.SuccessMessages;
 
 
-namespace Book_A_Doc.Application.Queries.Account;
+namespace Book_A_Doc.Application.Queries.Account.GetUserProfile;
 
 public class GetUserProfileQueryHandler(IUserService userService) : IRequestHandler<GetUserProfileQuery, Result<UserProfileDto>>
 {

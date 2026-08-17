@@ -1,4 +1,5 @@
-﻿using Book_A_Doc.Application.Services;
+﻿using Book_A_Doc.Application.Queries.Account.GetAllUsers;
+using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
@@ -169,5 +170,20 @@ public class IdentityService(
 
     public async Task<ApplicationRole?> GetRoleByIdAsync(Guid id)
     => await roleManager.FindByIdAsync(id.ToString());
+
+    public async Task<List<UseresResponse>> GetAllUsersWithRolesAsync(CancellationToken cancellationToken)
+        => await( from user in userManager.Users
+                  join userRole in context.UserRoles on user.Id equals userRole.UserId
+                  join role in context.Roles on userRole.RoleId equals role.Id
+                  select new UseresResponse
+                  {
+                      Id = user.Id,
+                      Name = user.FullName,
+                      Email = user.Email!,
+                      PhoneNumber = user.PhoneNumber!,
+                      RoleNames = new List<string> { role.Name! }
+                  })
+            .ToListAsync(cancellationToken);
+
 }
         
