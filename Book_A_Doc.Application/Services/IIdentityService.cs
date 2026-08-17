@@ -1,4 +1,5 @@
-﻿using Book_A_Doc.Domain.Models.Identity;
+﻿using Book_A_Doc.Application.Queries.Account.GetAllUsers;
+using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
 
 namespace Book_A_Doc.Application.Services;
@@ -35,4 +36,6 @@ public interface IIdentityService
     CancellationToken cancellationToken);
 
     Task<ApplicationRole?> GetRoleByIdAsync(Guid id);
+
+    Task<List<UseresResponse>> GetAllUsersWithRolesAsync(CancellationToken cancellationToken);
 }

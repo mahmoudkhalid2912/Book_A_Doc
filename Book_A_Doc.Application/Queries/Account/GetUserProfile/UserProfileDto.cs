@@ -1,4 +1,4 @@
-﻿namespace Book_A_Doc.Application.Queries.Account;
+﻿namespace Book_A_Doc.Application.Queries.Account.GetUserProfile;
 
 public class UserProfileDto
 {

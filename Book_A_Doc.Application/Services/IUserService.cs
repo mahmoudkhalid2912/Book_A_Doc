@@ -1,4 +1,4 @@
-﻿using Book_A_Doc.Application.Queries.Account;
+﻿using Book_A_Doc.Application.Queries.Account.GetUserProfile;
 
 namespace Book_A_Doc.Application.Services;
 

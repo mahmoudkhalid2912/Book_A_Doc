@@ -1,4 +1,4 @@
-﻿using Book_A_Doc.Application.Queries.Account;
+﻿using Book_A_Doc.Application.Queries.Account.GetUserProfile;
 using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.Models.Identity;
 using Microsoft.AspNetCore.Identity;
