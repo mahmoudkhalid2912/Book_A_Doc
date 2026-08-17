@@ -38,4 +38,6 @@ public static class AuthMessages
 
     public const string UsersRetrieved = "Users Retrieved Successfully";
 
+    public const string RoleRetrieved = "Role Retrieved Successfully";
+
 }

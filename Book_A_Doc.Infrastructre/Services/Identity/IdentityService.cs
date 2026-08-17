@@ -6,6 +6,7 @@ using Book_A_Doc.Domain.ResultPattern.SuccessMessages;
 using Book_A_Doc.Infrastructre.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Book_A_Doc.Infrastructre.Services.Identity;
 
@@ -165,5 +166,8 @@ public class IdentityService(
         return await roleManager.Roles
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<ApplicationRole?> GetRoleByIdAsync(Guid id)
+    => await roleManager.FindByIdAsync(id.ToString());
 }
         

@@ -189,4 +189,11 @@ public static class AuthErrors
         "Failed to assign role.",
         400
     );
+
+    //Roles
+    public static readonly Error RoleNotFound = new(
+        "Auth.RoleNotFound",
+        "Role was not found.",
+        404
+    );
 }

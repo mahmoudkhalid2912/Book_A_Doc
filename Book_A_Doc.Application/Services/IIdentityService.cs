@@ -33,4 +33,6 @@ public interface IIdentityService
 
     Task<List<ApplicationRole>> GetAllRolesAsync(
     CancellationToken cancellationToken);
+
+    Task<ApplicationRole?> GetRoleByIdAsync(Guid id);
 }
