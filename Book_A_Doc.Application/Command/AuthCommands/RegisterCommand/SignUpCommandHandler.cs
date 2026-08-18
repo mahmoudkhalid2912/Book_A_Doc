@@ -1,4 +1,5 @@
-﻿using Book_A_Doc.Application.Services;
+﻿using Book_A_Doc.Application.BackgroundJobs;
+using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.Consts;
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.ResultPattern;
@@ -76,6 +77,9 @@ public class SignUpCommandHandler(
                 user.Email!,
                 AuthMessages.ConfirmationEmailSent,
                 emailBody));
+
+        backgroundService.Enqueue<CreatePatientJob>(
+             job => job.ExecuteAsync(user.Id));
 
         return Result.Success(
             AuthMessages.RegisterSuccess);
