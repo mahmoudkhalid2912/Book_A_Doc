@@ -6,4 +6,9 @@ public static class UserErrors
         "User.UserNotFound"
         , "User not found."
         , 404);
+
+     public static readonly Error DoctorNotFound=new Error(
+         "Doctor.DoctorNotFound"
+         , "Doctor not found."
+         , 404 );
 }

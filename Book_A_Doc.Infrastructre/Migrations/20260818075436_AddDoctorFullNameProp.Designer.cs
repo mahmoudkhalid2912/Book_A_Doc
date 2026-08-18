@@ -4,6 +4,7 @@ using Book_A_Doc.Infrastructre.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Book_A_Doc.Infrastructre.Migrations
 {
     [DbContext(typeof(Book_A_Doc_Context))]
-    partial class Book_A_Doc_ContextModelSnapshot : ModelSnapshot
+    [Migration("20260818075436_AddDoctorFullNameProp")]
+    partial class AddDoctorFullNameProp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
