@@ -150,7 +150,8 @@ public static class UserSeeder
                 Specialty = doctorData.Specialty,
                 Description = doctorData.Description,
                 YearsOfExperience = doctorData.YearsOfExperience,
-                SessionPrice = doctorData.SessionPrice
+                SessionPrice = doctorData.SessionPrice,
+                FullName = doctorData.FullName
             };
 
             context.Doctors.Add(doctor);

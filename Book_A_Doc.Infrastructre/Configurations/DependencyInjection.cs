@@ -1,7 +1,9 @@
 ﻿using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.Models.Identity;
+using Book_A_Doc.Domain.Repositories;
 using Book_A_Doc.Infrastructre.Configurations;
 using Book_A_Doc.Infrastructre.Persistence;
+using Book_A_Doc.Infrastructre.Repositories;
 using Book_A_Doc.Infrastructre.Services.Account;
 using Book_A_Doc.Infrastructre.Services.Authentication;
 using Book_A_Doc.Infrastructre.Services.Authentication.JWT;
@@ -217,6 +219,8 @@ public static class DependencyInjection
         services.AddScoped<IBackgroundService,HangfireService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IOtpService, OTPService>();
+        services.AddScoped<IDoctorRepository, DoctorRepository>();
+        services.AddScoped<IPatientRepository, PatientRepository>();
 
         services.AddSingleton<IApplicationSettings, ApplicationSettingsProvider>();
 
