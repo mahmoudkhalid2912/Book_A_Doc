@@ -15,4 +15,7 @@ public class ApplicationUser : IdentityUser<Guid>
     public Patient? Patient { get; set; }
 
     public IList<RefreshToken> RefreshTokens { get; set; } = [];
+
+    public bool IsDeleted { get; set; }
+
 }

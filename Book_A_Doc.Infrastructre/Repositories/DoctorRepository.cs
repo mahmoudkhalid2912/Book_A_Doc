@@ -15,7 +15,7 @@ public class DoctorRepository(Book_A_Doc_Context context) : IDoctorRepository
 
     public async Task<Doctor?> GetDoctorAsync(Guid Id, CancellationToken cancellationToken = default)
     {
-        var doctor = await context.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.UserId == Id, cancellationToken);
+        var doctor = await context.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.UserId == Id&&d.IsDeleted==false, cancellationToken);
         return doctor is null? null : doctor;
     }
 }

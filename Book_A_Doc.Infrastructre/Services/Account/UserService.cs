@@ -12,7 +12,7 @@ public class UserService(UserManager<ApplicationUser> userManager) : IUserServic
     public async Task<UserProfileDto> GetUserProfileAsync(Guid userId)
     {
         var user = await userManager.Users
-            .Where(x => x.Id == userId)
+            .Where(x => x.Id == userId&&x.IsDeleted==false)
             .Select(x => new
             {
                 x.FullName,

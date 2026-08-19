@@ -7,7 +7,6 @@ public class AvailabilitySlotConfiguration : IEntityTypeConfiguration<Availabili
 {
     public void Configure(EntityTypeBuilder<AvailabilitySlot> builder)
     {
-        builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Date)
                .IsRequired();

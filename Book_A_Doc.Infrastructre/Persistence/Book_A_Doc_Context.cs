@@ -10,6 +10,14 @@ public class Book_A_Doc_Context(DbContextOptions<Book_A_Doc_Context> dbContextOp
    public DbSet<Patient> Patients { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
 
+    public DbSet<Booking> Bookings { get; set; }
+
+    public DbSet<Payment> Payments { get; set; }
+
+    public DbSet<DoctorAvailability> DoctorAvailabilities { get; set; }
+
+    public DbSet<AvailabilitySlot> AvailabilitySlots { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
