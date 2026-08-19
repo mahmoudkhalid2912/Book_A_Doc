@@ -7,4 +7,6 @@ public static class UserMessages
     public const string DoctorsRetrievedSuccessfully = "Doctors retrieved successfully.";
 
     public const string DoctorRetrievedSuccessfully = "Doctor profile retrieved successfully.";
+
+    public const string DoctorCreatedSuccessfully = "Doctor profile created successfully.";
 }

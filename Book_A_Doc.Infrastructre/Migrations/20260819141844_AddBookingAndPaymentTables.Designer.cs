@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Book_A_Doc.Infrastructre.Migrations
 {
     [DbContext(typeof(Book_A_Doc_Context))]
-    [Migration("20260818075436_AddDoctorFullNameProp")]
-    partial class AddDoctorFullNameProp
+    [Migration("20260819141844_AddBookingAndPaymentTables")]
+    partial class AddBookingAndPaymentTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,7 +48,7 @@ namespace Book_A_Doc.Infrastructre.Migrations
                     b.HasIndex("DoctorId", "Date", "StartTime", "EndTime")
                         .IsUnique();
 
-                    b.ToTable("AvailabilitySlot");
+                    b.ToTable("AvailabilitySlots");
                 });
 
             modelBuilder.Entity("Book_A_Doc.Domain.Models.Identity.ApplicationRole", b =>
@@ -111,6 +111,9 @@ namespace Book_A_Doc.Infrastructre.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -278,7 +281,7 @@ namespace Book_A_Doc.Infrastructre.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Booking");
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("DoctorAvailability", b =>
@@ -310,7 +313,7 @@ namespace Book_A_Doc.Infrastructre.Migrations
                     b.HasIndex("DoctorId", "DayOfWeek", "StartTime", "EndTime")
                         .IsUnique();
 
-                    b.ToTable("DoctorAvailability");
+                    b.ToTable("DoctorAvailabilities");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -464,7 +467,7 @@ namespace Book_A_Doc.Infrastructre.Migrations
                         .IsUnique()
                         .HasFilter("[TransactionId] IS NOT NULL");
 
-                    b.ToTable("Payment");
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("AvailabilitySlot", b =>

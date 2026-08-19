@@ -6,13 +6,35 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Book_A_Doc.Infrastructre.Migrations
 {
     /// <inheritdoc />
-    public partial class AddBookingAndPaymentModelsWithTheierConfiguration : Migration
+    public partial class AddBookingAndPaymentTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "FullName",
+                table: "Doctors",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "Specialty",
+                table: "Doctors",
+                type: "nvarchar(100)",
+                maxLength: 100,
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsDeleted",
+                table: "AspNetUsers",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
+
             migrationBuilder.CreateTable(
-                name: "AvailabilitySlot",
+                name: "AvailabilitySlots",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -23,9 +45,9 @@ namespace Book_A_Doc.Infrastructre.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AvailabilitySlot", x => x.Id);
+                    table.PrimaryKey("PK_AvailabilitySlots", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AvailabilitySlot_Doctors_DoctorId",
+                        name: "FK_AvailabilitySlots_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
                         principalColumn: "UserId",
@@ -33,7 +55,7 @@ namespace Book_A_Doc.Infrastructre.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DoctorAvailability",
+                name: "DoctorAvailabilities",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -46,9 +68,9 @@ namespace Book_A_Doc.Infrastructre.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DoctorAvailability", x => x.Id);
+                    table.PrimaryKey("PK_DoctorAvailabilities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DoctorAvailability_Doctors_DoctorId",
+                        name: "FK_DoctorAvailabilities_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
                         principalColumn: "UserId",
@@ -56,7 +78,7 @@ namespace Book_A_Doc.Infrastructre.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Booking",
+                name: "Bookings",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -72,21 +94,21 @@ namespace Book_A_Doc.Infrastructre.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Booking", x => x.Id);
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Booking_AvailabilitySlot_AvailabilitySlotId",
+                        name: "FK_Bookings_AvailabilitySlots_AvailabilitySlotId",
                         column: x => x.AvailabilitySlotId,
-                        principalTable: "AvailabilitySlot",
+                        principalTable: "AvailabilitySlots",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Booking_Doctors_DoctorId",
+                        name: "FK_Bookings_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Booking_Patients_PatientId",
+                        name: "FK_Bookings_Patients_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patients",
                         principalColumn: "UserId",
@@ -94,7 +116,7 @@ namespace Book_A_Doc.Infrastructre.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Payment",
+                name: "Payments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -111,53 +133,53 @@ namespace Book_A_Doc.Infrastructre.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Payment", x => x.Id);
+                    table.PrimaryKey("PK_Payments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payment_Booking_BookingId",
+                        name: "FK_Payments_Bookings_BookingId",
                         column: x => x.BookingId,
-                        principalTable: "Booking",
+                        principalTable: "Bookings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AvailabilitySlot_DoctorId_Date_StartTime_EndTime",
-                table: "AvailabilitySlot",
+                name: "IX_AvailabilitySlots_DoctorId_Date_StartTime_EndTime",
+                table: "AvailabilitySlots",
                 columns: new[] { "DoctorId", "Date", "StartTime", "EndTime" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Booking_AvailabilitySlotId",
-                table: "Booking",
+                name: "IX_Bookings_AvailabilitySlotId",
+                table: "Bookings",
                 column: "AvailabilitySlotId",
                 unique: true,
                 filter: "[Status] IN (2, 4)");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Booking_DoctorId",
-                table: "Booking",
+                name: "IX_Bookings_DoctorId",
+                table: "Bookings",
                 column: "DoctorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Booking_PatientId",
-                table: "Booking",
+                name: "IX_Bookings_PatientId",
+                table: "Bookings",
                 column: "PatientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DoctorAvailability_DoctorId_DayOfWeek_StartTime_EndTime",
-                table: "DoctorAvailability",
+                name: "IX_DoctorAvailabilities_DoctorId_DayOfWeek_StartTime_EndTime",
+                table: "DoctorAvailabilities",
                 columns: new[] { "DoctorId", "DayOfWeek", "StartTime", "EndTime" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_BookingId",
-                table: "Payment",
+                name: "IX_Payments_BookingId",
+                table: "Payments",
                 column: "BookingId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_TransactionId",
-                table: "Payment",
+                name: "IX_Payments_TransactionId",
+                table: "Payments",
                 column: "TransactionId",
                 unique: true,
                 filter: "[TransactionId] IS NOT NULL");
@@ -167,16 +189,28 @@ namespace Book_A_Doc.Infrastructre.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DoctorAvailability");
+                name: "DoctorAvailabilities");
 
             migrationBuilder.DropTable(
-                name: "Payment");
+                name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Booking");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
-                name: "AvailabilitySlot");
+                name: "AvailabilitySlots");
+
+            migrationBuilder.DropColumn(
+                name: "FullName",
+                table: "Doctors");
+
+            migrationBuilder.DropColumn(
+                name: "Specialty",
+                table: "Doctors");
+
+            migrationBuilder.DropColumn(
+                name: "IsDeleted",
+                table: "AspNetUsers");
         }
     }
 }
