@@ -1,5 +1,6 @@
 ﻿using Book_A_Doc.ApiResponse;
 using Book_A_Doc.Application.Command.Doctor.Add;
+using Book_A_Doc.Application.Command.Doctor.Delete;
 using Book_A_Doc.Application.Queries.Doctors.GetAllDoctors;
 using Book_A_Doc.Application.Queries.Doctors.GetDoctor;
 using MediatR;
@@ -48,11 +49,12 @@ public class DoctorController : ApiControllerBase
         return ToResponse(result);
     }
 
-    //[HttpDelete("Delete")]
-    //[Authorize(Roles ="Admin")]
-    //public async Task<IActionResult> DeleteDoctor([FromServices]IMediator mediator, [FromQuery] Guid id)
-    //{
-    //    var result = await mediator.Send(new DeleteDoctorCommand(id), cancellationToken);
-    //    return ToResponse(result);
-    //}
+    [HttpDelete("Delete")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteDoctor([FromServices] IMediator mediator, [FromQuery] Guid id
+        , CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new DeleteDoctorCommand(id), cancellationToken);
+        return ToResponse(result);
+    }
 }

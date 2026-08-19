@@ -185,5 +185,7 @@ public class IdentityService(
                   })
             .ToListAsync(cancellationToken);
 
+    public Task UpdateAsync(ApplicationUser user, CancellationToken cancellationToken)
+    => userManager.UpdateAsync(user);
 }
         
