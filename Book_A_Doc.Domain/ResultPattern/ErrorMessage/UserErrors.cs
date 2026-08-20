@@ -53,4 +53,6 @@ public static class UserErrors
          "Doctor must be at least 22 years old.",
          400
     );
+
+    
 }
