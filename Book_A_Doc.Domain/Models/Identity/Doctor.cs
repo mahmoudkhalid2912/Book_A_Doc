@@ -18,4 +18,6 @@ public class Doctor :BaseEntity
     public decimal AverageRating { get;}
 
     public int ReviewCount { get;}
+
+
 }
