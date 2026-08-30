@@ -1,5 +1,5 @@
-﻿using Book_A_Doc.Domain.Models.Identity;
-using Microsoft.AspNetCore.Identity;
+﻿using Book_A_Doc.Domain.Models;
+using Book_A_Doc.Domain.Models.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +13,10 @@ public class Book_A_Doc_Context(DbContextOptions<Book_A_Doc_Context> dbContextOp
     public DbSet<Booking> Bookings { get; set; }
 
     public DbSet<Payment> Payments { get; set; }
+
+    public DbSet<Holiday> Holidays { get; set; }
+
+    public DbSet<DoctorException> DoctorExceptions { get; set; }
 
     public DbSet<DoctorAvailability> DoctorAvailabilities { get; set; }
 

@@ -24,8 +24,7 @@ public class DoctorExceptionConfiguration
             .HasMaxLength(500)
             .IsRequired();
 
-        builder.Property(x => x.IsAvailable)
-            .IsRequired();
+        
 
         builder.HasIndex(x => new
         {
