@@ -8,7 +8,6 @@ using Book_A_Doc.Application.Command.AuthCommands.ResendConfiramationEmailComman
 using Book_A_Doc.Application.Command.AuthCommands.ResetPasswordCommand;
 using Book_A_Doc.Application.Command.AuthCommands.VerifyOtpCommand;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Book_A_Doc.Controllers;
