@@ -13,20 +13,9 @@ public class AvailabilitySlotGenerator(
         DateOnly day,
         CancellationToken cancellationToken = default)
     {
-        
-
-        var isHoliday = await _context.Holidays
-            .AsNoTracking()
-            .AnyAsync(
-                x => x.Date == day &&
-                     x.IsActive,
-                cancellationToken);
-
-        if (isHoliday)
-            return;
-
-
-        
+        // -----------------------------------------
+        // 1. Get active doctor availabilities
+        // -----------------------------------------
 
         var availabilities = await _context.DoctorAvailabilities
             .AsNoTracking()
@@ -50,16 +39,28 @@ public class AvailabilitySlotGenerator(
             return;
 
 
-     
+        // -----------------------------------------
+        // 2. Get doctor exceptions
+        // -----------------------------------------
 
-        var exceptionDoctorIds = await _context.DoctorExceptions
+        var exceptions = await _context.DoctorExceptions
             .AsNoTracking()
             .Where(x => x.Date == day)
             .Select(x => x.DoctorId)
-            .ToHashSetAsync(cancellationToken);
+            .ToListAsync(cancellationToken);
+
+        var hasGlobalException = exceptions
+            .Any(x => x is null);
+
+        var exceptionDoctorIds = exceptions
+            .Where(x => x.HasValue)
+            .Select(x => x.Value)
+            .ToHashSet();
 
 
-       
+        // -----------------------------------------
+        // 3. Get existing slots
+        // -----------------------------------------
 
         var existingSlots = await _context.AvailabilitySlots
             .AsNoTracking()
@@ -80,13 +81,19 @@ public class AvailabilitySlotGenerator(
             .ToHashSet();
 
 
-       
+        // -----------------------------------------
+        // 4. Generate new slots
+        // -----------------------------------------
 
         var newSlots = new List<AvailabilitySlot>();
 
         foreach (var availability in availabilities)
         {
-          
+            // Global exception
+            if (hasGlobalException)
+                continue;
+
+            // Doctor-specific exception
             if (exceptionDoctorIds.Contains(
                     availability.DoctorId))
             {
@@ -125,7 +132,7 @@ public class AvailabilitySlotGenerator(
 
 
         // -----------------------------------------
-        // 6. Nothing to save
+        // 5. Nothing to save
         // -----------------------------------------
 
         if (newSlots.Count == 0)
@@ -133,7 +140,7 @@ public class AvailabilitySlotGenerator(
 
 
         // -----------------------------------------
-        // 7. Save
+        // 6. Save
         // -----------------------------------------
 
         await _context.AvailabilitySlots
@@ -149,8 +156,6 @@ public class AvailabilitySlotGenerator(
     public async Task CleanOldSlotsAsync(
         CancellationToken cancellationToken = default)
     {
-        
-
         var today = DateOnly.FromDateTime(
             DateTime.Today);
 

@@ -1,4 +1,5 @@
-﻿using Book_A_Doc.Application.Services;
+﻿using Book_A_Doc.Application.Interfaces;
+using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.Repositories;
 using Book_A_Doc.Infrastructre.Configurations;
@@ -13,6 +14,8 @@ using Book_A_Doc.Infrastructre.Services.Mail.Options;
 using Book_A_Doc.Infrastructre.Services.Mail.Service;
 using Book_A_Doc.Infrastructre.Services.OTP;
 using Book_A_Doc.Infrastructre.Services.RefreshTokens;
+using Book_A_Doc.Infrastructure.Repositories;
+using Book_A_Doc.Infrastructure.Services;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -221,6 +224,8 @@ public static class DependencyInjection
         services.AddScoped<IOtpService, OTPService>();
         services.AddScoped<IDoctorRepository, DoctorRepository>();
         services.AddScoped<IPatientRepository, PatientRepository>();
+        services.AddScoped<IDoctorAvailabilityRepository,DoctorAvailabilityRepository>();
+        services.AddScoped<ITransactionManager, TransactionManager>();
 
         services.AddSingleton<IApplicationSettings, ApplicationSettingsProvider>();
 
