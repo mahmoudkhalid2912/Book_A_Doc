@@ -8,6 +8,7 @@ using Hangfire;
 using Hangfire.Dashboard;
 using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 
 app.Run();

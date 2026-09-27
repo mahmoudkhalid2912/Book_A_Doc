@@ -1,6 +1,7 @@
-﻿using Book_A_Doc.Domain.Models.Identity;
+﻿using Book_A_Doc.Domain.Models;
+using Book_A_Doc.Domain.Models.Identity;
 
-public class DoctorAvailability
+public class DoctorAvailability:BaseEntity
 {
     public Guid Id { get; set; }
 

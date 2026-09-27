@@ -1,6 +1,7 @@
 ﻿using Book_A_Doc.ApiResponse;
 using Book_A_Doc.Application.Command.Doctor.Add;
 using Book_A_Doc.Application.Command.Doctor.Delete;
+using Book_A_Doc.Application.Command.Doctor.Update;
 using Book_A_Doc.Application.Queries.Doctors.GetAllDoctors;
 using Book_A_Doc.Application.Queries.Doctors.GetDoctor;
 using MediatR;
@@ -12,12 +13,11 @@ namespace Book_A_Doc.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class DoctorController : ApiControllerBase
+public class DoctorController(IMediator mediator) : ApiControllerBase
 {
     [HttpGet("All")]
     [Authorize(Roles = "Admin,Patient")]
     public async Task<IActionResult> GetAllDoctors(
-        [FromServices] IMediator mediator,
         CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetAllDoctorsQuery(), cancellationToken);
@@ -41,7 +41,6 @@ public class DoctorController : ApiControllerBase
     [HttpPost("Add")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AddDoctor(
-        [FromServices] IMediator mediator,
         [FromBody] AddDoctorCommand command,
         CancellationToken cancellationToken)
     {
@@ -51,10 +50,20 @@ public class DoctorController : ApiControllerBase
 
     [HttpDelete("Delete")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> DeleteDoctor([FromServices] IMediator mediator, [FromQuery] Guid id
+    public async Task<IActionResult> DeleteDoctor([FromQuery] Guid id
         , CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new DeleteDoctorCommand(id), cancellationToken);
         return ToResponse(result);
     }
+
+    [HttpPut("Update")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateDoctor([FromBody] UpdateDoctorCommand command
+        , CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(command, cancellationToken);
+        return ToResponse(result);
+    }
+
 }

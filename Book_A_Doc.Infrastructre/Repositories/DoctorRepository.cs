@@ -41,4 +41,28 @@ public class DoctorRepository(Book_A_Doc_Context context) : IDoctorRepository
 
         return doctor;
     }
+
+    public async Task<Result> UpdateAsync(Guid id, string? fullName, string? specialty, string? description, byte? yearsOfExperience, decimal? sessionPrice, DateOnly? birthDate, string? phoneNumber, CancellationToken cancellationToken = default)
+    {
+        var doctorUpdated = await context.Doctors
+            .Where(d => d.UserId == id && !d.IsDeleted)
+            .ExecuteUpdateAsync(setters => setters
+                .SetProperty(d => d.FullName, d => string.IsNullOrWhiteSpace(fullName) ? d.FullName : fullName)
+                .SetProperty(d => d.Specialty, d => string.IsNullOrWhiteSpace(specialty) ? d.Specialty : specialty)
+                .SetProperty(d => d.Description, d => string.IsNullOrWhiteSpace(description) ? d.Description : description)
+                .SetProperty(d => d.YearsOfExperience, d => yearsOfExperience ?? d.YearsOfExperience)
+                .SetProperty(d => d.SessionPrice, d => sessionPrice ?? d.SessionPrice), cancellationToken);
+
+        if (doctorUpdated == 0)
+            return Result.Failure(UserErrors.DoctorNotFound);
+
+        await context.Users
+            .Where(u => u.Id == id)
+            .ExecuteUpdateAsync(setters => setters
+                .SetProperty(u => u.FullName, u => string.IsNullOrWhiteSpace(fullName) ? u.FullName : fullName)
+                .SetProperty(u => u.BirthDate, u => birthDate ?? u.BirthDate)
+                .SetProperty(u => u.PhoneNumber, u => string.IsNullOrWhiteSpace(phoneNumber) ? u.PhoneNumber : phoneNumber), cancellationToken);
+
+        return Result.Success();
+    }
 }

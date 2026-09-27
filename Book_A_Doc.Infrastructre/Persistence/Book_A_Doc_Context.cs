@@ -14,8 +14,6 @@ public class Book_A_Doc_Context(DbContextOptions<Book_A_Doc_Context> dbContextOp
 
     public DbSet<Payment> Payments { get; set; }
 
-    public DbSet<Holiday> Holidays { get; set; }
-
     public DbSet<DoctorException> DoctorExceptions { get; set; }
 
     public DbSet<DoctorAvailability> DoctorAvailabilities { get; set; }

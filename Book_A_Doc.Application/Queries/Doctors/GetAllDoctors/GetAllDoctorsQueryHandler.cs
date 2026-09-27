@@ -14,7 +14,7 @@ public class GetAllDoctorsQueryHandler(IDoctorRepository doctorRepository) : IRe
         var response = doctors.Select(d => new GetAllDoctorsResponse
         {
             Id = d.UserId,
-            FullName = d.User.FullName,
+            FullName = d.FullName,
             Specialty = d.Specialty,
             Description = d.Description,
             YearsOfExperience = d.YearsOfExperience,

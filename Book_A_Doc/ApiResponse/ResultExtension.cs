@@ -10,6 +10,9 @@ public static class ResultExtensions
         this Result<T> result,
         ControllerBase controller)
     {
+        // ================================
+        // SUCCESS
+        // ================================
         if (result.IsSuccess)
         {
             return controller.Ok(new ApiResponse<T>
@@ -19,50 +22,57 @@ public static class ResultExtensions
             });
         }
 
+        // ================================
+        // VALIDATION ERROR
+        // ================================
         if (result is IValidationResult validationResult)
         {
             return new ObjectResult(new ApiResponse<T>
             {
                 Message = result.Error.Description,
+
                 Errors = validationResult.Errors
                     .GroupBy(error => error.Code)
                     .Select(group => new ApiError
                     {
                         Field = group.Key,
                         Descriptions = group
-                            .Select(x => x.Description)
+                            .Select(error => error.Description)
                             .ToList()
                     })
+                    .ToList()
             })
             {
                 StatusCode = result.Error.StatusCode
             };
         }
 
+        // ================================
+        // BUSINESS ERROR
+        // ================================
         return new ObjectResult(new ApiResponse<T>
         {
             Message = result.Error.Description,
-            Errors =
-            [
-                new ApiError
-                {
-                    Field = result.Error.Code,
-                    Descriptions =
-                    [
-                        result.Error.Description
-                    ]
-                }
-            ]
+
+            Error = new ApiBusinessError
+            {
+                Code = result.Error.Code,
+                Description = result.Error.Description
+            }
         })
         {
             StatusCode = result.Error.StatusCode
         };
     }
 
+
     public static IActionResult ToApiResponse(
         this Result result,
         ControllerBase controller)
     {
+        // ================================
+        // SUCCESS
+        // ================================
         if (result.IsSuccess)
         {
             return controller.Ok(new ApiResponse<object>
@@ -71,40 +81,43 @@ public static class ResultExtensions
             });
         }
 
+        // ================================
+        // VALIDATION ERROR
+        // ================================
         if (result is IValidationResult validationResult)
         {
             return new ObjectResult(new ApiResponse<object>
             {
                 Message = result.Error.Description,
+
                 Errors = validationResult.Errors
                     .GroupBy(error => error.Code)
                     .Select(group => new ApiError
                     {
                         Field = group.Key,
                         Descriptions = group
-                            .Select(x => x.Description)
+                            .Select(error => error.Description)
                             .ToList()
                     })
+                    .ToList()
             })
             {
                 StatusCode = result.Error.StatusCode
             };
         }
 
+        // ================================
+        // BUSINESS ERROR
+        // ================================
         return new ObjectResult(new ApiResponse<object>
         {
             Message = result.Error.Description,
-            Errors =
-            [
-                new ApiError
-                {
-                    Field = result.Error.Code,
-                    Descriptions =
-                    [
-                        result.Error.Description
-                    ]
-                }
-            ]
+
+            Error = new ApiBusinessError
+            {
+                Code = result.Error.Code,
+                Description = result.Error.Description
+            }
         })
         {
             StatusCode = result.Error.StatusCode
