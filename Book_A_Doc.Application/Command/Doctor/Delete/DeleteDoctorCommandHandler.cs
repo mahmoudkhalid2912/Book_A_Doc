@@ -23,6 +23,6 @@ public class DeleteDoctorCommandHandler(IIdentityService identityService,IDoctor
             return UserDeletedResult;
         }
 
-        return Result.Success(UserMessages.DoctorDeletedSuccessfully);
+        return Result.Success(UserMessages.DoctorDeletedSuccessfully,UserMessages.DoctorDeletedSuccessfully);
     }
 }

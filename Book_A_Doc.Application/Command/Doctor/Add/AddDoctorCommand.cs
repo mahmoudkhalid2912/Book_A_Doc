@@ -1,9 +1,10 @@
-﻿using Book_A_Doc.Domain.ResultPattern;
+﻿using Book_A_Doc.Application.Interfaces;
+using Book_A_Doc.Domain.ResultPattern;
 using MediatR;
 
 namespace Book_A_Doc.Application.Command.Doctor.Add;
 
-public class AddDoctorCommand:IRequest<Result<Guid>>
+public class AddDoctorCommand:ITransactionalRequest<Result<Guid>>
 {
     public string Email { get; set; } = string.Empty;
 
