@@ -6,6 +6,8 @@ public class ApiResponse<T>
 
     public T? Data { get; init; }
 
+    public ApiBusinessError? Error { get; init; }
+
     public IEnumerable<ApiError>? Errors { get; init; }
 }
 
@@ -14,4 +16,11 @@ public class ApiError
     public string Field { get; init; } = string.Empty;
 
     public IEnumerable<string> Descriptions { get; init; } = [];
+}
+
+public class ApiBusinessError
+{
+    public string? Code { get; init; }
+
+    public string? Description { get; init; }
 }
