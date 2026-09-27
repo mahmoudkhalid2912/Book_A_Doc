@@ -13,19 +13,16 @@ namespace Book_A_Doc.Controllers;
 [Route("api/doctor-availability")]
 [ApiController]
 [Authorize]
-public class DoctorAvailabilityController(IMediator sender)
-    : ApiControllerBase
+public class DoctorAvailabilityController(IMediator sender) : ApiControllerBase
 {
     [HttpGet("doctor/{doctorId:guid}")]
     [Authorize(Roles = "Patient,Doctor,Admin")]
     public async Task<IActionResult> GetDoctorAvailableDays(
-    [FromRoute] Guid doctorId,
-    CancellationToken cancellationToken)
+        [FromRoute] Guid doctorId,
+        CancellationToken cancellationToken)
     {
-        var query = new GetDoctorAvailableDaysQuery(doctorId);
-
         var result = await sender.Send(
-            query,
+            new GetDoctorAvailableDaysQuery(doctorId),
             cancellationToken);
 
         return ToResponse(result);
@@ -37,10 +34,7 @@ public class DoctorAvailabilityController(IMediator sender)
         [FromBody] CreateDoctorAvailabilityCommand command,
         CancellationToken cancellationToken)
     {
-        var result = await sender.Send(
-            command,
-            cancellationToken);
-
+        var result = await sender.Send(command, cancellationToken);
         return ToResponse(result);
     }
 
@@ -59,33 +53,22 @@ public class DoctorAvailabilityController(IMediator sender)
             request.EndTime,
             request.SlotDurationInMinutes);
 
-        var result = await sender.Send(
-            command,
-            cancellationToken);
-
+        var result = await sender.Send(command, cancellationToken);
         return ToResponse(result);
     }
 
-
-    
-
-    [HttpGet("{id:guid}")]
+    [HttpGet("{AvailabilityId:guid}/{DoctorId:guid}")]
     [Authorize(Roles = "Patient,Doctor,Admin")]
     public async Task<IActionResult> GetById(
-        [FromRoute] Guid id,
+        [FromRoute] Guid AvailabilityId,[FromRoute]Guid DoctorId,
         CancellationToken cancellationToken)
     {
-        var query = new GetDoctorAvailabilityByIdQuery(id);
-
         var result = await sender.Send(
-            query,
+            new GetDoctorAvailabilityByIdQuery(AvailabilityId, DoctorId),
             cancellationToken);
 
         return ToResponse(result);
     }
-
-
-    
 
     [HttpPut("{id:guid}")]
     [Authorize(Roles = "Doctor")]
@@ -105,17 +88,9 @@ public class DoctorAvailabilityController(IMediator sender)
             request.SlotDurationInMinutes,
             request.IsActive);
 
-        var result = await sender.Send(
-            command,
-            cancellationToken);
-
+        var result = await sender.Send(command, cancellationToken);
         return ToResponse(result);
     }
-
-
-    // =========================================================
-    // DELETE
-    // =========================================================
 
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = "Doctor")]
@@ -124,13 +99,8 @@ public class DoctorAvailabilityController(IMediator sender)
         CancellationToken cancellationToken)
     {
         var doctorId = CurrentUser.GetUserId(User);
-
-        var command = new DeleteDoctorAvailabilityCommand(
-            id,
-            doctorId);
-
         var result = await sender.Send(
-            command,
+            new DeleteDoctorAvailabilityCommand(id, doctorId),
             cancellationToken);
 
         return ToResponse(result);

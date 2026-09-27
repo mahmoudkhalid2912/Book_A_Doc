@@ -8,13 +8,14 @@ public interface IDoctorAvailabilityRepository
         Guid doctorId,
         CancellationToken cancellationToken = default);
 
-    Task<DoctorAvailability?> GetByIdAsync(
-    Guid id,
-    CancellationToken cancellationToken = default);
+     Task<DoctorAvailability?> GetByIdAsync(
+     Guid AvailabilityId,
+     Guid DoctorId,
+     CancellationToken cancellationToken = default);
 
     Task<DoctorAvailability?> GetTrackedByIdAsync(
-        Guid id,
-        Guid doctorId,
+        Guid AvailabilityId,
+       Guid DoctorId,
         CancellationToken cancellationToken = default);
 
     Task<bool> HasOverlapAsync(
