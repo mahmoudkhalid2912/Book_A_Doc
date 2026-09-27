@@ -17,7 +17,7 @@ public class GetDoctorAvailabilityByIdQueryHandler(
         CancellationToken cancellationToken)
     {
         var availability = await repository.GetByIdAsync(
-            request.Id,cancellationToken);
+            request.AvailabilityId, request.DoctorId, cancellationToken);
 
         if (availability is null)
         {

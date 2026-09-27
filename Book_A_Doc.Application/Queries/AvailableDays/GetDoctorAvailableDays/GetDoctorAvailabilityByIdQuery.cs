@@ -5,5 +5,6 @@ using MediatR;
 namespace Book_A_Doc.Application.Queries.DoctorAvailability;
 
 public record GetDoctorAvailabilityByIdQuery(
-    Guid Id
+    Guid AvailabilityId,
+    Guid DoctorId
 ) : IRequest<Result<DoctorAvailabilityResponseDto>>;

@@ -19,36 +19,37 @@ public class DoctorAvailabilityRepository(
             .AsNoTracking()
             .Where(x =>
                 x.DoctorId == doctorId &&
-                x.IsActive)
+                x.IsActive&&x.IsDeleted==false)
             .OrderBy(x => x.DayOfWeek)
             .ThenBy(x => x.StartTime)
             .ToListAsync(cancellationToken);
     }
 
     public async Task<DoctorAvailability?> GetByIdAsync(
-    Guid id,
+    Guid AvailabilityId,
+    Guid DoctorId,
     CancellationToken cancellationToken = default)
     {
         var availability = await _context.DoctorAvailabilities
             .AsNoTracking()
             .Include(x => x.Doctor)
             .FirstOrDefaultAsync(
-                x => x.Id == id,
+                x => x.Id == AvailabilityId && x.DoctorId == DoctorId,
                 cancellationToken);
         return availability;
     }
     
 
     public async Task<DoctorAvailability?> GetTrackedByIdAsync(
-        Guid id,
-        Guid doctorId,
+        Guid AvailabilityId,
+        Guid DoctorId,
         CancellationToken cancellationToken = default)
     {
         return await _context.DoctorAvailabilities
             .FirstOrDefaultAsync(
                 x =>
-                    x.Id == id &&
-                    x.DoctorId == doctorId,
+                    x.Id == AvailabilityId &&
+                    x.DoctorId == DoctorId,
                 cancellationToken);
     }
 
