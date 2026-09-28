@@ -4,6 +4,7 @@ using Book_A_Doc.Application.Command.AvailableDays.Delete;
 using Book_A_Doc.Application.Command.AvailableDays.Update;
 using Book_A_Doc.Application.Queries.AvailableDays;
 using Book_A_Doc.Application.Queries.DoctorAvailability;
+using Book_A_Doc.Domain.Consts;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace Book_A_Doc.Controllers;
 public class DoctorAvailabilityController(IMediator sender) : ApiControllerBase
 {
     [HttpGet("doctor/{doctorId:guid}")]
-    [Authorize(Roles = "Patient,Doctor,Admin")]
+    [Authorize(Roles = DefaultRoles.Admin + "," + DefaultRoles.Doctor + "," + DefaultRoles.Patient)]
     public async Task<IActionResult> GetDoctorAvailableDays(
         [FromRoute] Guid doctorId,
         CancellationToken cancellationToken)
@@ -29,7 +30,7 @@ public class DoctorAvailabilityController(IMediator sender) : ApiControllerBase
     }
 
     [HttpPost("admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = DefaultRoles.Admin)]
     public async Task<IActionResult> CreateForDoctor(
         [FromBody] CreateDoctorAvailabilityCommand command,
         CancellationToken cancellationToken)
@@ -39,7 +40,7 @@ public class DoctorAvailabilityController(IMediator sender) : ApiControllerBase
     }
 
     [HttpPost("my")]
-    [Authorize(Roles = "Doctor")]
+    [Authorize(Roles = DefaultRoles.Doctor)]
     public async Task<IActionResult> CreateForMyself(
         [FromBody] CreateDoctorAvailabilityCommand request,
         CancellationToken cancellationToken)
@@ -58,7 +59,7 @@ public class DoctorAvailabilityController(IMediator sender) : ApiControllerBase
     }
 
     [HttpGet("{AvailabilityId:guid}/{DoctorId:guid}")]
-    [Authorize(Roles = "Patient,Doctor,Admin")]
+    [Authorize(Roles = DefaultRoles.Patient + "," + DefaultRoles.Doctor + "," + DefaultRoles.Admin)]
     public async Task<IActionResult> GetById(
         [FromRoute] Guid AvailabilityId,[FromRoute]Guid DoctorId,
         CancellationToken cancellationToken)
@@ -71,7 +72,7 @@ public class DoctorAvailabilityController(IMediator sender) : ApiControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    [Authorize(Roles = "Doctor")]
+    [Authorize(Roles = DefaultRoles.Doctor)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
         [FromBody] UpdateDoctorAvailabilityCommand request,
@@ -93,7 +94,7 @@ public class DoctorAvailabilityController(IMediator sender) : ApiControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    [Authorize(Roles = "Doctor")]
+    [Authorize(Roles = DefaultRoles.Doctor)]
     public async Task<IActionResult> Delete(
         [FromRoute] Guid id,
         CancellationToken cancellationToken)

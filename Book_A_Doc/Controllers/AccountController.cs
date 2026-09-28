@@ -4,6 +4,7 @@ using Book_A_Doc.Application.Command.Account.UpdateUserProfileCommand;
 using Book_A_Doc.Application.Queries.Account;
 using Book_A_Doc.Application.Queries.Account.GetAllUsers;
 using Book_A_Doc.Application.Queries.Account.GetUserProfile;
+using Book_A_Doc.Domain.Consts;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,7 @@ public class AccountController() : ApiControllerBase
     }
 
     [HttpGet("all-users")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = DefaultRoles.Admin)]
     public async Task<IActionResult> GetAllUsers([FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetAllUserQuery());
