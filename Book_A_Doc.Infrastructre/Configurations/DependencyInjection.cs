@@ -1,5 +1,6 @@
 ﻿using Book_A_Doc.Application.Interfaces;
 using Book_A_Doc.Application.Services;
+using Book_A_Doc.Domain.Interfaces.Repositories;
 using Book_A_Doc.Domain.Models.Identity;
 using Book_A_Doc.Domain.Repositories;
 using Book_A_Doc.Infrastructre.Configurations;
@@ -226,6 +227,7 @@ public static class DependencyInjection
         services.AddScoped<IPatientRepository, PatientRepository>();
         services.AddScoped<IDoctorAvailabilityRepository,DoctorAvailabilityRepository>();
         services.AddScoped<ITransactionManager, TransactionManager>();
+        services.AddScoped<ISlotRepository, SlotRepository>();
 
         services.AddSingleton<IApplicationSettings, ApplicationSettingsProvider>();
 
