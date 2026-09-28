@@ -4,6 +4,7 @@ using Book_A_Doc.Application.Command.Doctor.Delete;
 using Book_A_Doc.Application.Command.Doctor.Update;
 using Book_A_Doc.Application.Queries.Doctors.GetAllDoctors;
 using Book_A_Doc.Application.Queries.Doctors.GetDoctor;
+using Book_A_Doc.Domain.Consts;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace Book_A_Doc.Controllers;
 public class DoctorController(IMediator mediator) : ApiControllerBase
 {
     [HttpGet("All")]
-    [Authorize(Roles = "Admin,Patient")]
+    [Authorize(Roles = DefaultRoles.Admin + "," + DefaultRoles.Patient)]
     public async Task<IActionResult> GetAllDoctors(
         CancellationToken cancellationToken)
     {
@@ -25,7 +26,7 @@ public class DoctorController(IMediator mediator) : ApiControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin,Patient")]
+    [Authorize(Roles = DefaultRoles.Admin + "," + DefaultRoles.Patient)]
     public async Task<IActionResult> GetDoctor(
     [FromServices] IMediator mediator,
     [FromQuery] Guid id,
@@ -39,7 +40,7 @@ public class DoctorController(IMediator mediator) : ApiControllerBase
     }
 
     [HttpPost("Add")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = DefaultRoles.Admin)]
     public async Task<IActionResult> AddDoctor(
         [FromBody] AddDoctorCommand command,
         CancellationToken cancellationToken)
@@ -49,7 +50,7 @@ public class DoctorController(IMediator mediator) : ApiControllerBase
     }
 
     [HttpDelete("Delete")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = DefaultRoles.Admin)]
     public async Task<IActionResult> DeleteDoctor([FromQuery] Guid id
         , CancellationToken cancellationToken)
     {
@@ -58,7 +59,7 @@ public class DoctorController(IMediator mediator) : ApiControllerBase
     }
 
     [HttpPut("Update")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = DefaultRoles.Admin)]
     public async Task<IActionResult> UpdateDoctor([FromBody] UpdateDoctorCommand command
         , CancellationToken cancellationToken)
     {
