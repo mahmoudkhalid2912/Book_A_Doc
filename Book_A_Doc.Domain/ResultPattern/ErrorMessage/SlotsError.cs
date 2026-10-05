@@ -81,4 +81,34 @@ public static  class SlotsError
         "The maximum number of slots per day has been exceeded.",
         400);
 
+    public static readonly Error DoctorNotAvailableOnThisDay = new(
+        "Slots.DoctorNotAvailableOnThisDay",
+        "The doctor is not available on this day.",
+        400);
+
+    public static readonly Error InvalidDateRange = new(
+        "Slots.InvalidDateRange",
+        "End date must be after or equal to start date.",
+        400);
+
+    public static readonly Error DateRangeTooLarge = new(
+        "Slots.DateRangeTooLarge",
+        "Date range cannot exceed 31 days.",
+        400);
+
+    public static readonly Error SlotIdRequired = new(
+    "Slots.SlotIdRequired",
+    "Slot ID is required.",
+    400);
+
+    public static readonly Error SlotAlreadyDeactivated = new(
+        "Slots.SlotAlreadyDeactivated",
+        "This slot is already deactivated.",
+        400);
+
+    public static readonly Error SlotAlreadyActive = new(
+    "Slots.SlotAlreadyActive",
+    "This slot is already active.",
+    400);
+
 }

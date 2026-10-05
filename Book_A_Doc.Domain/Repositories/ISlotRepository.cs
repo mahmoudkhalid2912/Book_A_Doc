@@ -7,4 +7,16 @@ public interface ISlotRepository
     DateOnly date,
     CancellationToken cancellationToken = default);
 
+    Task<IEnumerable<AvailabilitySlot>> GetSlotsByDoctorAndDateRangeAsync(
+        Guid doctorId,
+        DateOnly startDate,
+        DateOnly endDate,
+        CancellationToken cancellationToken = default);
+
+    Task<AvailabilitySlot?> GetByIdAsync(
+       Guid id,
+       CancellationToken cancellationToken = default);
+
+    void Update(AvailabilitySlot slot);
+
 }

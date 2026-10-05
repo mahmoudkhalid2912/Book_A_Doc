@@ -15,4 +15,14 @@ public class AvailabilitySlot
 
     public bool IsActive { get; set; } = true;
     public Booking? Booking { get; set; }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+    }
+
+    public void Activate()
+    {
+        IsActive = true;
+    }
 }
