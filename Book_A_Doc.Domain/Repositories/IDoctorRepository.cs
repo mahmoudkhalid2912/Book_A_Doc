@@ -11,6 +11,11 @@ public interface IDoctorRepository
 
     Task<Result> DeleteAsync(Guid Id, CancellationToken cancellationToken = default);
 
+    Task<Doctor?> GetDoctorWithAvailabilityAsync(
+        Guid doctorId,
+        DateOnly date,
+        CancellationToken cancellationToken = default);
+
     Task<Result> UpdateAsync(
     Guid id,
     string? fullName,
