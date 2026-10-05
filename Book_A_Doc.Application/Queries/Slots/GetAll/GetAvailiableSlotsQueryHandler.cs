@@ -1,37 +1,48 @@
 ﻿using Book_A_Doc.Application.Services;
 using Book_A_Doc.Domain.Interfaces.Repositories;
+using Book_A_Doc.Domain.Repositories;
 using Book_A_Doc.Domain.ResultPattern;
 using Book_A_Doc.Domain.ResultPattern.ErrorMessage;
+using Book_A_Doc.Domain.ResultPattern.SuccessMessages;
 using MediatR;
 
 namespace Book_A_Doc.Application.Queries.Slots.GetAll;
 
 public class GetAvailiableSlotsQueryHandler(
-    IIdentityService identityService,
-    ISlotRepository repository)
+    IDoctorRepository doctorRepository,
+    IAvailabilitySlotGenerator generator,
+    ISlotRepository slotRepository)
     : IRequestHandler<GetAvailableSlotsQuery, Result<IEnumerable<AvailableSlotsDtoResponse>>>
 {
     public async Task<Result<IEnumerable<AvailableSlotsDtoResponse>>> Handle(
         GetAvailableSlotsQuery request,
         CancellationToken cancellationToken)
     {
-       
-        var doctor = await identityService.FindByIdAsync(request.DoctorId);
+        
+        var doctor = await doctorRepository.GetDoctorWithAvailabilityAsync(
+            request.DoctorId,
+            request.Date,
+            cancellationToken);
 
         if (doctor is null)
         {
-            return Result.Failure<IEnumerable<AvailableSlotsDtoResponse>>(UserErrors.DoctorNotFound);
+            return Result.Failure<IEnumerable<AvailableSlotsDtoResponse>>(
+                SlotsError.DoctorNotAvailableOnThisDay);
         }
 
         
-        var availableSlots = (await repository.GetAvailableSlotsByDoctorAndDateAsync(
+        await generator.GenerateAsync(request.Date, cancellationToken);
+
+       
+        var availableSlots = (await slotRepository.GetAvailableSlotsByDoctorAndDateAsync(
             request.DoctorId,
             request.Date,
             cancellationToken)).ToList();
 
         if (availableSlots.Count == 0)
         {
-            return Result.Failure<IEnumerable<AvailableSlotsDtoResponse>>(SlotsError.SlotsNotFound);
+            return Result.Failure<IEnumerable<AvailableSlotsDtoResponse>>(
+                SlotsError.SlotsNotFound);
         }
 
         
@@ -44,6 +55,6 @@ public class GetAvailiableSlotsQueryHandler(
             IsActive = slot.IsActive
         }).ToList();
 
-        return Result.Success<IEnumerable<AvailableSlotsDtoResponse>>(availableSlotsDto);
+        return Result.Success<IEnumerable<AvailableSlotsDtoResponse>>(availableSlotsDto,SlotsMessages.AvailableSlotsRetrieved);
     }
 }
