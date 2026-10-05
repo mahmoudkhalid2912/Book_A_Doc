@@ -42,6 +42,22 @@ public class DoctorRepository(Book_A_Doc_Context context) : IDoctorRepository
         return doctor;
     }
 
+    public async Task<Doctor?> GetDoctorWithAvailabilityAsync(
+    Guid doctorId,
+    DateOnly date,
+    CancellationToken cancellationToken = default)
+    {
+       
+        return await context.Doctors
+            .AsNoTracking()
+            .Where(d => d.UserId == doctorId)
+            .Where(d => context.DoctorAvailabilities
+                .Any(a => a.DoctorId == d.UserId
+                       && a.DayOfWeek == date.DayOfWeek
+                       && a.IsActive))
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<Result> UpdateAsync(Guid id, string? fullName, string? specialty, string? description, byte? yearsOfExperience, decimal? sessionPrice, DateOnly? birthDate, string? phoneNumber, CancellationToken cancellationToken = default)
     {
         var doctorUpdated = await context.Doctors

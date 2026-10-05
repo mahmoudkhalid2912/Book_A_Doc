@@ -6,6 +6,7 @@ using Book_A_Doc.Domain.Repositories;
 using Book_A_Doc.Infrastructre.Configurations;
 using Book_A_Doc.Infrastructre.Persistence;
 using Book_A_Doc.Infrastructre.Repositories;
+using Book_A_Doc.Infrastructre.Services;
 using Book_A_Doc.Infrastructre.Services.Account;
 using Book_A_Doc.Infrastructre.Services.Authentication;
 using Book_A_Doc.Infrastructre.Services.Authentication.JWT;
@@ -218,6 +219,7 @@ public static class DependencyInjection
         services.AddScoped<ITokenEncoder, TokenEncoder>();
 
         services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+        services.AddScoped<IAvailabilitySlotGenerator, AvailabilitySlotGenerator>();
 
         services.AddScoped<IEmailService, EmailSender>();
         services.AddScoped<IBackgroundService,HangfireService>();
