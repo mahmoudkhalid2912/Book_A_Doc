@@ -230,6 +230,7 @@ public static class DependencyInjection
         services.AddScoped<IDoctorAvailabilityRepository,DoctorAvailabilityRepository>();
         services.AddScoped<ITransactionManager, TransactionManager>();
         services.AddScoped<ISlotRepository, SlotRepository>();
+        services.AddScoped<IBookingRepository, BookingRepository>();
 
         services.AddSingleton<IApplicationSettings, ApplicationSettingsProvider>();
 
